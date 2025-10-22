@@ -115,6 +115,32 @@ All colors MUST be HSL.
       transform: translateY(0);
     }
   }
+  
+  /* Responsive container utilities */
+  .container-responsive {
+    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Smooth scrolling and overflow handling */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Prevent layout shift on responsive grids */
+  .grid-responsive {
+    @apply grid gap-4 sm:gap-6;
+  }
+  
+  /* Card responsive padding */
+  .card-responsive {
+    @apply p-4 sm:p-6;
+  }
+  
+  /* Heading responsive sizing */
+  .heading-responsive {
+    @apply text-2xl sm:text-3xl lg:text-4xl;
+  }
 }
 
 @layer base {

@@ -44,13 +44,13 @@ const CareerPage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="p-8 space-y-8 max-w-[1600px] mx-auto">
+      <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto">
         {/* Header */}
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tight">
             Career Agent Workspace
           </h1>
-          <p className="text-muted-foreground text-base">
+          <p className="text-sm sm:text-base text-muted-foreground">
             Your AI-powered Career Coach for growth, learning, and professional development
           </p>
         </div>
@@ -58,15 +58,15 @@ const CareerPage = () => {
         {/* Career Overview */}
         <Card>
           <CardHeader>
-            <CardTitle>Career Overview</CardTitle>
-            <CardDescription>Your professional profile and milestones</CardDescription>
+            <CardTitle className="text-lg sm:text-xl">Career Overview</CardTitle>
+            <CardDescription className="text-sm">Your professional profile and milestones</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
               {careerStats.map((stat, idx) => (
-                <div key={idx} className="p-4 rounded-lg bg-secondary/50 border border-border">
-                  <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
-                  <p className="text-lg font-semibold text-foreground">{stat.value}</p>
+                <div key={idx} className="p-3 sm:p-4 rounded-lg bg-secondary/50 border border-border">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">{stat.label}</p>
+                  <p className="text-base sm:text-lg font-semibold text-foreground truncate">{stat.value}</p>
                 </div>
               ))}
             </div>
@@ -94,10 +94,10 @@ const CareerPage = () => {
         </Card>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Chat Interface - 2 columns */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="h-[500px]">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 min-w-0">
+            <div className="h-[400px] sm:h-[500px]">
               <AgentChat
                 agentName="Career Coach"
                 agentIcon={Target}
@@ -243,7 +243,7 @@ const CareerPage = () => {
           </div>
 
           {/* Right Sidebar - 1 column */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6 min-w-0">
             {/* Skill Progress */}
             <AIModuleCard
               title="Skill Progress"
@@ -254,9 +254,9 @@ const CareerPage = () => {
               <div className="space-y-3">
                 {skillProgress.map((skill) => (
                   <div key={skill.name}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground">{skill.name}</span>
-                      <span className="text-muted-foreground">{skill.level}%</span>
+                    <div className="flex justify-between text-xs sm:text-sm mb-1">
+                      <span className="text-foreground truncate">{skill.name}</span>
+                      <span className="text-muted-foreground flex-shrink-0 ml-2">{skill.level}%</span>
                     </div>
                     <Progress value={skill.level} />
                   </div>

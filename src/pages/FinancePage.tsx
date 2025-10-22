@@ -22,17 +22,17 @@ const FinancePage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-fade-in">
+      <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto animate-fade-in">
         {/* Header */}
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3 tracking-tight">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tight">
               Finance Agent Workspace
             </h1>
-            <p className="text-muted-foreground text-base">AI-powered financial planning, tracking, and insights</p>
+            <p className="text-sm sm:text-base text-muted-foreground">AI-powered financial planning, tracking, and insights</p>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs sm:text-sm">
               <DollarSign className="w-3 h-3 mr-1" />
               Active Agent
             </Badge>
@@ -40,12 +40,13 @@ const FinancePage = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Dialog open={addExpenseOpen} onOpenChange={setAddExpenseOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
-                <Plus className="w-4 h-4" />
-                Add Expense
+              <Button variant="outline" className="gap-2 text-xs sm:text-sm">
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Add Expense</span>
+                <span className="xs:hidden">Expense</span>
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -159,10 +160,10 @@ const FinancePage = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
           {/* Left Column - Agent Chat */}
           <div className="xl:col-span-1 min-w-0">
-            <div className="h-[700px]">
+            <div className="h-[500px] sm:h-[700px]">
               <AgentChat
                 agentName="Finance Agent"
                 agentIcon={DollarSign}
@@ -179,20 +180,20 @@ const FinancePage = () => {
           </div>
 
           {/* Right Column - Dashboard Modules */}
-          <div className="xl:col-span-2 space-y-6 min-w-0">
+          <div className="xl:col-span-2 space-y-4 sm:space-y-6 min-w-0">
             {/* Overview Summary */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {financialStats.map((stat, idx) => (
-                <Card key={idx} className="p-4 bg-card/50 backdrop-blur border-border">
+                <Card key={idx} className="p-3 sm:p-4 bg-card/50 backdrop-blur border-border">
                   <div className="flex items-start justify-between mb-2">
-                    <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                      <stat.icon className={`w-4 h-4 ${stat.iconColor}`} />
+                    <div className={`p-1.5 sm:p-2 rounded-lg ${stat.bgColor} flex-shrink-0`}>
+                      <stat.icon className={`w-3 h-3 sm:w-4 sm:h-4 ${stat.iconColor}`} />
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
-                  <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                  <p className={`text-xs mt-1 ${stat.changeColor}`}>
-                    {stat.change} vs last month
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1 truncate">{stat.label}</p>
+                  <p className="text-lg sm:text-2xl font-bold text-foreground">{stat.value}</p>
+                  <p className={`text-xs mt-1 ${stat.changeColor} truncate`}>
+                    {stat.change}
                   </p>
                 </Card>
               ))}
