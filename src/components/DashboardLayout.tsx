@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Brain, LayoutDashboard, Target, TrendingUp, Heart, Apple, Clock, Settings, LogOut } from "lucide-react";
+import { Brain, LayoutDashboard, Target, TrendingUp, Heart, Apple, Clock, BookOpen, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -120,6 +120,7 @@ const navItems = [
   { icon: Heart, label: "Health & Fitness", path: "/health" },
   { icon: Apple, label: "Nutrition", path: "/nutrition" },
   { icon: Clock, label: "Lifestyle", path: "/lifestyle" },
+  { icon: BookOpen, label: "NeuraNotes", path: "/neuranotes" },
 ];
 
 export default DashboardLayout;
