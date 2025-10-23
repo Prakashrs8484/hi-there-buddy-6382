@@ -1,19 +1,21 @@
-import { DollarSign, TrendingUp, Target, PiggyBank, Wallet, TrendingDown, Plus, FileText, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { DollarSign, TrendingUp, Target, PiggyBank, Plus, FileText, Download } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
-import AIModuleCard from "@/components/AIModuleCard";
 import AgentChat from "@/components/AgentChat";
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { useState } from "react";
+import { ExpenseTracker } from "@/components/finance/ExpenseTracker";
+import { BudgetPlanner } from "@/components/finance/BudgetPlanner";
+import { FinancialGoals } from "@/components/finance/FinancialGoals";
+import { ExpenseForecast } from "@/components/finance/ExpenseForecast";
+import { TransactionsList } from "@/components/finance/TransactionsList";
+import { IncomeTracker } from "@/components/finance/IncomeTracker";
 
 const FinancePage = () => {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
@@ -153,9 +155,15 @@ const FinancePage = () => {
             </DialogContent>
           </Dialog>
 
-          <Button variant="outline" className="gap-2">
-            <FileText className="w-4 h-4" />
-            Generate Report
+          <Button variant="outline" className="gap-2 text-xs sm:text-sm">
+            <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden xs:inline">Generate Report</span>
+            <span className="xs:hidden">Report</span>
+          </Button>
+          <Button variant="outline" className="gap-2 text-xs sm:text-sm">
+            <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden xs:inline">Export Data</span>
+            <span className="xs:hidden">Export</span>
           </Button>
         </div>
 
@@ -184,7 +192,7 @@ const FinancePage = () => {
             {/* Overview Summary */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {financialStats.map((stat, idx) => (
-                <Card key={idx} className="p-3 sm:p-4 bg-card/50 backdrop-blur border-border">
+                <Card key={idx} className="p-3 sm:p-4 bg-card/50 backdrop-blur border-border hover:shadow-lg transition-shadow">
                   <div className="flex items-start justify-between mb-2">
                     <div className={`p-1.5 sm:p-2 rounded-lg ${stat.bgColor} flex-shrink-0`}>
                       <stat.icon className={`w-3 h-3 sm:w-4 sm:h-4 ${stat.iconColor}`} />
@@ -199,6 +207,9 @@ const FinancePage = () => {
               ))}
             </div>
 
+            {/* AI Expense Forecast */}
+            <ExpenseForecast />
+
             {/* Expense & Income Tracking */}
             <Tabs defaultValue="expenses" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
@@ -207,197 +218,22 @@ const FinancePage = () => {
               </TabsList>
               
               <TabsContent value="expenses" className="space-y-4">
-                <AIModuleCard
-                  title="Expense Breakdown"
-                  description="Your spending by category this month"
-                  status="active"
-                  icon={TrendingDown}
-                >
-                  <div className="h-[300px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={expenseData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis dataKey="category" stroke="hsl(var(--muted-foreground))" />
-                        <YAxis stroke="hsl(var(--muted-foreground))" />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: "hsl(var(--card))", 
-                            border: "1px solid hsl(var(--border))",
-                            borderRadius: "8px"
-                          }}
-                        />
-                        <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </AIModuleCard>
+                <ExpenseTracker />
               </TabsContent>
 
               <TabsContent value="income" className="space-y-4">
-                <AIModuleCard
-                  title="Income Trends"
-                  description="Your income over the last 6 months"
-                  status="active"
-                  icon={TrendingUp}
-                >
-                  <div className="h-[300px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={incomeData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
-                        <YAxis stroke="hsl(var(--muted-foreground))" />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: "hsl(var(--card))", 
-                            border: "1px solid hsl(var(--border))",
-                            borderRadius: "8px"
-                          }}
-                        />
-                        <Line type="monotone" dataKey="amount" stroke="hsl(var(--primary))" strokeWidth={2} />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-                </AIModuleCard>
+                <IncomeTracker />
               </TabsContent>
             </Tabs>
 
             {/* Budget Planner */}
-            <AIModuleCard
-              title="AI Budget Planner"
-              description="Personalized budget recommendations"
-              status="completed"
-              icon={PiggyBank}
-              actions={
-                <Button variant="outline" size="sm">
-                  Regenerate Budget
-                </Button>
-              }
-            >
-              <div className="space-y-3">
-                {budgetCategories.map((category, idx) => (
-                  <div key={idx}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-foreground font-medium">{category.name}</span>
-                      <span className="text-muted-foreground">
-                        ${category.spent} / ${category.budget}
-                      </span>
-                    </div>
-                    <Progress 
-                      value={(category.spent / category.budget) * 100} 
-                      className="h-2"
-                    />
-                    {category.spent > category.budget && (
-                      <p className="text-xs text-destructive mt-1">Over budget by ${category.spent - category.budget}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </AIModuleCard>
+            <BudgetPlanner />
 
             {/* Savings Goals Progress */}
-            <AIModuleCard
-              title="Savings & Goal Progress"
-              description="Track your financial goals"
-              status="active"
-              icon={Target}
-            >
-              <div className="space-y-4">
-                {savingsGoals.map((goal, idx) => (
-                  <Card key={idx} className="p-4 bg-secondary/20">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h4 className="font-semibold text-foreground">{goal.name}</h4>
-                        <p className="text-sm text-muted-foreground">Target: {goal.deadline}</p>
-                      </div>
-                      <Badge variant="outline" className="bg-primary/10">
-                        {goal.progress}%
-                      </Badge>
-                    </div>
-                    <Progress value={goal.progress} className="h-2 mb-2" />
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        ${goal.current.toLocaleString()} saved
-                      </span>
-                      <span className="text-foreground font-medium">
-                        ${goal.target.toLocaleString()} goal
-                      </span>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </AIModuleCard>
+            <FinancialGoals />
 
-            {/* Expense Log Table */}
-            <AIModuleCard
-              title="Recent Transactions"
-              description="Your latest financial activities"
-              status="active"
-              icon={Wallet}
-            >
-              <div className="rounded-lg border border-border overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentTransactions.map((transaction, idx) => (
-                      <TableRow key={idx}>
-                        <TableCell className="text-muted-foreground">{transaction.date}</TableCell>
-                        <TableCell className="font-medium">{transaction.description}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="text-xs">
-                            {transaction.category}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <span className={transaction.type === 'income' ? 'text-success' : 'text-foreground'}>
-                            {transaction.type === 'income' ? '+' : '-'}${transaction.amount}
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </AIModuleCard>
-
-            {/* AI Insights */}
-            <AIModuleCard
-              title="AI Financial Insights"
-              description="Smart recommendations from your Finance Agent"
-              status="active"
-              icon={TrendingUp}
-            >
-              <div className="space-y-3">
-                {aiInsights.map((insight, idx) => (
-                  <Card key={idx} className="p-4 bg-secondary/20">
-                    <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${insight.type === 'warning' ? 'bg-destructive/10' : insight.type === 'success' ? 'bg-success/10' : 'bg-accent/10'} mt-0.5`}>
-                        {insight.type === 'warning' ? (
-                          <ArrowUpRight className={`w-4 h-4 ${insight.type === 'warning' ? 'text-destructive' : 'text-accent'}`} />
-                        ) : (
-                          <ArrowDownRight className="w-4 h-4 text-success" />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-foreground mb-1">{insight.title}</p>
-                        <p className="text-xs text-muted-foreground">{insight.description}</p>
-                        {insight.action && (
-                          <Button variant="link" className="h-auto p-0 mt-2 text-xs text-primary">
-                            {insight.action}
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </AIModuleCard>
+            {/* Transactions List */}
+            <TransactionsList />
           </div>
         </div>
       </div>
@@ -420,7 +256,7 @@ const financialStats = [
     label: "Total Expenses", 
     value: "$3,180", 
     change: "-5%", 
-    icon: TrendingDown,
+    icon: PiggyBank,
     bgColor: "bg-destructive/10",
     iconColor: "text-destructive",
     changeColor: "text-success"
@@ -429,81 +265,19 @@ const financialStats = [
     label: "Net Savings", 
     value: "$2,020", 
     change: "+15%", 
-    icon: PiggyBank,
+    icon: DollarSign,
     bgColor: "bg-primary/10",
     iconColor: "text-primary",
     changeColor: "text-success"
   },
   { 
     label: "Active Goals", 
-    value: "3", 
+    value: "4", 
     change: "+1", 
     icon: Target,
     bgColor: "bg-accent/10",
     iconColor: "text-accent",
     changeColor: "text-success"
-  },
-];
-
-const expenseData = [
-  { category: "Food", amount: 680 },
-  { category: "Transport", amount: 420 },
-  { category: "Bills", amount: 850 },
-  { category: "Entertainment", amount: 320 },
-  { category: "Shopping", amount: 560 },
-  { category: "Healthcare", amount: 350 },
-];
-
-const incomeData = [
-  { month: "May", amount: 4800 },
-  { month: "Jun", amount: 5100 },
-  { month: "Jul", amount: 4900 },
-  { month: "Aug", amount: 5300 },
-  { month: "Sep", amount: 5000 },
-  { month: "Oct", amount: 5200 },
-];
-
-const budgetCategories = [
-  { name: "Housing", spent: 1200, budget: 1500 },
-  { name: "Food & Dining", spent: 450, budget: 600 },
-  { name: "Transportation", spent: 280, budget: 400 },
-  { name: "Entertainment", spent: 180, budget: 300 },
-  { name: "Utilities", spent: 150, budget: 200 },
-];
-
-const savingsGoals = [
-  { name: "Emergency Fund", current: 8500, target: 15000, progress: 57, deadline: "Dec 2025" },
-  { name: "Vacation", current: 2800, target: 5000, progress: 56, deadline: "Jun 2025" },
-  { name: "New Laptop", current: 900, target: 2000, progress: 45, deadline: "Mar 2025" },
-];
-
-const recentTransactions = [
-  { date: "Oct 15", description: "Grocery Shopping", category: "Food", amount: "125", type: "expense" },
-  { date: "Oct 14", description: "Freelance Project", category: "Income", amount: "800", type: "income" },
-  { date: "Oct 13", description: "Electricity Bill", category: "Bills", amount: "85", type: "expense" },
-  { date: "Oct 12", description: "Movie Tickets", category: "Entertainment", amount: "45", type: "expense" },
-  { date: "Oct 11", description: "Salary Credit", category: "Income", amount: "5200", type: "income" },
-  { date: "Oct 10", description: "Gas Station", category: "Transport", amount: "60", type: "expense" },
-];
-
-const aiInsights = [
-  { 
-    type: "warning",
-    title: "Entertainment Spending Up 25%", 
-    description: "You spent 25% more on entertainment this month. Consider reducing to save $120/month.",
-    action: "View Recommendations"
-  },
-  { 
-    type: "info",
-    title: "Unused Subscriptions Detected", 
-    description: "3 subscriptions haven't been used in 60 days. Cancel them to save $45/month.",
-    action: "Review Subscriptions"
-  },
-  { 
-    type: "success",
-    title: "Excellent Savings Progress", 
-    description: "You're ahead on your emergency fund goal by 12%. Consider investing the extra $200.",
-    action: "Explore Investments"
   },
 ];
 
