@@ -34,8 +34,8 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
           <AppSidebar isActive={isActive} />
           <main className="flex-1 w-full overflow-auto relative">
             {/* Floating sidebar trigger */}
-            <div className="fixed top-6 left-6 z-50">
-              <SidebarTrigger className="bg-card/95 backdrop-blur-md shadow-lg border border-border/50 hover:bg-card hover:shadow-xl hover:border-border transition-all duration-200 rounded-xl p-2.5" />
+            <div className="fixed top-8 left-8 z-50">
+              <SidebarTrigger className="bg-card backdrop-blur-md shadow-lg border border-border hover:bg-card hover:shadow-xl hover:border-primary/30 transition-all duration-200 rounded-2xl p-3" />
             </div>
             {children}
           </main>
@@ -49,8 +49,8 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
       <div className="min-h-screen w-full flex bg-background">
         <AppSidebar isActive={isActive} />
         <main className="flex-1 w-full overflow-auto">
-          <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border/50 p-4 md:hidden shadow-sm">
-            <SidebarTrigger className="hover:bg-sidebar-accent/50 transition-all duration-200 rounded-lg" />
+          <div className="sticky top-0 z-40 bg-card/98 backdrop-blur-md border-b border-border p-5 md:hidden shadow-md">
+            <SidebarTrigger className="hover:bg-sidebar-accent transition-all duration-200 rounded-xl" />
           </div>
           {children}
         </main>
@@ -68,24 +68,24 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
       collapsible="offcanvas" 
       className="border-r border-sidebar-border bg-sidebar shadow-sm transition-all duration-300"
     >
-      <SidebarHeader className="border-b border-sidebar-border p-5">
+      <SidebarHeader className="border-b border-sidebar-border p-6">
         <Link to="/" className="flex items-center gap-3 transition-all duration-300">
-          <div className="p-2 rounded-xl bg-primary/10">
+          <div className="p-2.5 rounded-2xl bg-primary/10 shadow-sm">
             <Brain className="w-6 h-6 text-primary flex-shrink-0" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-sidebar-foreground">NeuraDesk</span>
+              <span className="text-lg font-bold text-sidebar-foreground tracking-tight">NeuraDesk</span>
               <span className="text-xs text-muted-foreground">AI Workspace</span>
             </div>
           )}
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="px-3 py-4">
+      <SidebarContent className="px-3 py-6">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-1.5">
               {navItems.map((item) => {
                 const active = isActive(item.path);
                 return (
@@ -95,14 +95,14 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
                       isActive={active} 
                       tooltip={item.label}
                       className={`
-                        transition-all duration-200 rounded-lg
+                        transition-all duration-200 rounded-xl h-11
                         ${active 
-                          ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium shadow-sm' 
-                          : 'hover:bg-sidebar-accent/50 text-sidebar-foreground/70 hover:text-sidebar-foreground'
+                          ? 'bg-primary/10 text-primary font-medium shadow-sm border border-primary/20' 
+                          : 'hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground border border-transparent'
                         }
                       `}
                     >
-                      <Link to={item.path} className="flex items-center gap-3 px-3 py-2">
+                      <Link to={item.path} className="flex items-center gap-3 px-4 py-2.5">
                         <item.icon className="w-5 h-5 flex-shrink-0" />
                         <span className="truncate">{item.label}</span>
                       </Link>
@@ -115,12 +115,12 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-3">
-        <SidebarMenu className="space-y-1">
+      <SidebarFooter className="border-t border-sidebar-border p-4">
+        <SidebarMenu className="space-y-1.5">
           <SidebarMenuItem>
             <SidebarMenuButton 
               tooltip="Settings"
-              className="transition-all duration-200 rounded-lg hover:bg-sidebar-accent/50 text-sidebar-foreground/70 hover:text-sidebar-foreground"
+              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-11"
             >
               <Settings className="w-5 h-5" />
               <span>Settings</span>
@@ -130,7 +130,7 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
             <SidebarMenuButton 
               asChild 
               tooltip="Sign Out"
-              className="transition-all duration-200 rounded-lg hover:bg-sidebar-accent/50 text-sidebar-foreground/70 hover:text-sidebar-foreground"
+              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-11"
             >
               <Link to="/auth" className="flex items-center gap-3">
                 <LogOut className="w-5 h-5" />
