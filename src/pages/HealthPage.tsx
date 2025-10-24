@@ -35,7 +35,6 @@ const HealthPage = () => {
   };
 
   const handleChatMessage = async (message: string) => {
-    // Simulate AI agent processing with condition-aware responses
     const lowerMessage = message.toLowerCase();
     if (lowerMessage.includes("pain") || lowerMessage.includes("condition") || lowerMessage.includes("recovery")) {
       return "I've assessed your condition. I recommend starting with gentle stretching exercises and avoiding high-impact activities for now. Would you like me to create a personalized recovery plan?";
@@ -73,49 +72,49 @@ const HealthPage = () => {
                   Log Activity
                 </Button>
               </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Log Physical Activity</DialogTitle>
-                    <DialogDescription>Record your workout or physical activity</DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <Label>Activity Type</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select activity" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="running">Running</SelectItem>
-                          <SelectItem value="cycling">Cycling</SelectItem>
-                          <SelectItem value="strength">Strength Training</SelectItem>
-                          <SelectItem value="yoga">Yoga</SelectItem>
-                          <SelectItem value="sports">Sports</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Duration (minutes)</Label>
-                      <Input type="number" placeholder="45" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Intensity</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select intensity" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="moderate">Moderate</SelectItem>
-                          <SelectItem value="intense">Intense</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Log Physical Activity</DialogTitle>
+                  <DialogDescription>Record your workout or physical activity</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label>Activity Type</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select activity" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="running">Running</SelectItem>
+                        <SelectItem value="cycling">Cycling</SelectItem>
+                        <SelectItem value="strength">Strength Training</SelectItem>
+                        <SelectItem value="yoga">Yoga</SelectItem>
+                        <SelectItem value="sports">Sports</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                  <DialogFooter>
-                    <Button onClick={handleLogActivity}>Log Activity</Button>
-                  </DialogFooter>
-                </DialogContent>
+                  <div className="space-y-2">
+                    <Label>Duration (minutes)</Label>
+                    <Input type="number" placeholder="45" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Intensity</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select intensity" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="light">Light</SelectItem>
+                        <SelectItem value="moderate">Moderate</SelectItem>
+                        <SelectItem value="intense">Intense</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button onClick={handleLogActivity}>Log Activity</Button>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
             <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
               <BarChart3 className="w-4 h-4 mr-2" />
@@ -123,49 +122,6 @@ const HealthPage = () => {
             </Button>
           </div>
         </div>
-      </div>
-    </DashboardLayout>
-  );
-};
-
-const HealthPage = () => {
-  const { toast } = useToast();
-  const [activityDialogOpen, setActivityDialogOpen] = useState(false);
-  const [workoutDialogOpen, setWorkoutDialogOpen] = useState(false);
-  const [recoveryDialogOpen, setRecoveryDialogOpen] = useState(false);
-  const [conditionDialogOpen, setConditionDialogOpen] = useState(false);
-  const [conditionStep, setConditionStep] = useState(1);
-  const [painLevel, setPainLevel] = useState([5]);
-  const [selectedBodyPart, setSelectedBodyPart] = useState("");
-
-  const handleLogActivity = () => {
-    setActivityDialogOpen(false);
-    toast({
-      title: "Activity Logged",
-      description: "Your workout has been recorded successfully.",
-    });
-  };
-
-  const handleChatMessage = async (message: string) => {
-    const lowerMessage = message.toLowerCase();
-    if (lowerMessage.includes("pain") || lowerMessage.includes("condition") || lowerMessage.includes("recovery")) {
-      return "I've assessed your condition. I recommend starting with gentle stretching exercises and avoiding high-impact activities for now. Would you like me to create a personalized recovery plan?";
-    }
-    return "I've analyzed your request. Your fitness plan has been updated based on your goals.";
-  };
-
-  const handleConditionAssessment = () => {
-    setConditionDialogOpen(false);
-    setConditionStep(1);
-    toast({
-      title: "Condition Assessed",
-      description: "AI Health Agent has created a personalized recovery plan for you.",
-    });
-  };
-
-  return (
-    <DashboardLayout hideNavigation>
-      <div className="page-container animate-fade-in">
 
         {/* Fitness Overview Summary */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -934,7 +890,6 @@ const HealthPage = () => {
             </div>
           </div>
         </div>
-      </div>
     </DashboardLayout>
   );
 };
