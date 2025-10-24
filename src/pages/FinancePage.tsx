@@ -24,31 +24,28 @@ const FinancePage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto animate-fade-in">
+      <div className="page-container animate-fade-in">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="min-w-0">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tight">
-              Finance Agent Workspace
+        <div className="page-header">
+          <div className="min-w-0 flex-1">
+            <h1 className="page-title mb-2">
+              Finance Workspace
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground">AI-powered financial planning, tracking, and insights</p>
+            <p className="page-subtitle">AI-powered financial planning, tracking, and insights</p>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs sm:text-sm">
-              <DollarSign className="w-3 h-3 mr-1" />
-              Active Agent
-            </Badge>
-          </div>
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+            <DollarSign className="w-4 h-4 mr-1.5" />
+            Active Agent
+          </Badge>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-3 mb-6">
           <Dialog open={addExpenseOpen} onOpenChange={setAddExpenseOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 text-xs sm:text-sm">
-                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden xs:inline">Add Expense</span>
-                <span className="xs:hidden">Expense</span>
+              <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+                <Plus className="w-4 h-4" />
+                <span>Add Expense</span>
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -88,7 +85,7 @@ const FinancePage = () => {
 
           <Dialog open={addIncomeOpen} onOpenChange={setAddIncomeOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
                 <Plus className="w-4 h-4" />
                 Add Income
               </Button>
@@ -128,9 +125,9 @@ const FinancePage = () => {
 
           <Dialog open={addGoalOpen} onOpenChange={setAddGoalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
                 <Target className="w-4 h-4" />
-                Add Financial Goal
+                Add Goal
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -155,23 +152,21 @@ const FinancePage = () => {
             </DialogContent>
           </Dialog>
 
-          <Button variant="outline" className="gap-2 text-xs sm:text-sm">
-            <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="hidden xs:inline">Generate Report</span>
-            <span className="xs:hidden">Report</span>
+          <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+            <FileText className="w-4 h-4" />
+            Generate Report
           </Button>
-          <Button variant="outline" className="gap-2 text-xs sm:text-sm">
-            <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="hidden xs:inline">Export Data</span>
-            <span className="xs:hidden">Export</span>
+          <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+            <Download className="w-4 h-4" />
+            Export Data
           </Button>
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
+        <div className="workspace-grid">
           {/* Left Column - Agent Chat */}
-          <div className="xl:col-span-1 min-w-0">
-            <div className="h-[500px] sm:h-[700px]">
+          <div className="workspace-chat-column">
+            <div className="h-[600px] sm:h-[750px] lg:h-[800px]">
               <AgentChat
                 agentName="Finance Agent"
                 agentIcon={DollarSign}
@@ -188,19 +183,19 @@ const FinancePage = () => {
           </div>
 
           {/* Right Column - Dashboard Modules */}
-          <div className="xl:col-span-2 space-y-4 sm:space-y-6 min-w-0">
+          <div className="workspace-content-column">
             {/* Overview Summary */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {financialStats.map((stat, idx) => (
-                <Card key={idx} className="p-3 sm:p-4 bg-card/50 backdrop-blur border-border hover:shadow-lg transition-shadow">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className={`p-1.5 sm:p-2 rounded-lg ${stat.bgColor} flex-shrink-0`}>
-                      <stat.icon className={`w-3 h-3 sm:w-4 sm:h-4 ${stat.iconColor}`} />
+                <Card key={idx} className="card-hover card-glass p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={`p-2.5 rounded-xl ${stat.bgColor} flex-shrink-0`}>
+                      <stat.icon className={`w-4 h-4 ${stat.iconColor}`} />
                     </div>
                   </div>
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-1 truncate">{stat.label}</p>
-                  <p className="text-lg sm:text-2xl font-bold text-foreground">{stat.value}</p>
-                  <p className={`text-xs mt-1 ${stat.changeColor} truncate`}>
+                  <p className="text-sm text-muted-foreground mb-1.5 font-medium">{stat.label}</p>
+                  <p className="text-2xl font-bold text-foreground mb-1">{stat.value}</p>
+                  <p className={`text-xs font-medium ${stat.changeColor}`}>
                     {stat.change}
                   </p>
                 </Card>

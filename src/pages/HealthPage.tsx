@@ -54,26 +54,25 @@ const HealthPage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
-        <div className="max-w-[1600px] mx-auto p-8 space-y-8">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3 tracking-tight">
-                Health & Fitness Workspace
-              </h1>
-              <p className="text-muted-foreground text-base">
-                Your AI-powered fitness command center — Plan, Track, Optimize
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <Dialog open={activityDialogOpen} onOpenChange={setActivityDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-gradient-to-r from-primary to-accent">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Log Activity
-                  </Button>
-                </DialogTrigger>
+      <div className="page-container animate-fade-in">
+        {/* Header */}
+        <div className="page-header">
+          <div className="min-w-0 flex-1">
+            <h1 className="page-title mb-2">
+              Health & Fitness Workspace
+            </h1>
+            <p className="page-subtitle">
+              Your AI-powered fitness command center — Plan, Track, Optimize
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Dialog open={activityDialogOpen} onOpenChange={setActivityDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="shadow-sm hover:shadow-md transition-all">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Log Activity
+                </Button>
+              </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Log Physical Activity</DialogTitle>
@@ -117,19 +116,62 @@ const HealthPage = () => {
                     <Button onClick={handleLogActivity}>Log Activity</Button>
                   </DialogFooter>
                 </DialogContent>
-              </Dialog>
-              <Button variant="outline">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Report
-              </Button>
-            </div>
+            </Dialog>
+            <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Generate Report
+            </Button>
           </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
+};
 
-          {/* Fitness Overview Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {fitnessOverview.map((stat, index) => (
-              <Card key={index} className="hover:border-primary/50 transition-all hover:shadow-lg">
-                <CardContent className="pt-6">
+const HealthPage = () => {
+  const { toast } = useToast();
+  const [activityDialogOpen, setActivityDialogOpen] = useState(false);
+  const [workoutDialogOpen, setWorkoutDialogOpen] = useState(false);
+  const [recoveryDialogOpen, setRecoveryDialogOpen] = useState(false);
+  const [conditionDialogOpen, setConditionDialogOpen] = useState(false);
+  const [conditionStep, setConditionStep] = useState(1);
+  const [painLevel, setPainLevel] = useState([5]);
+  const [selectedBodyPart, setSelectedBodyPart] = useState("");
+
+  const handleLogActivity = () => {
+    setActivityDialogOpen(false);
+    toast({
+      title: "Activity Logged",
+      description: "Your workout has been recorded successfully.",
+    });
+  };
+
+  const handleChatMessage = async (message: string) => {
+    const lowerMessage = message.toLowerCase();
+    if (lowerMessage.includes("pain") || lowerMessage.includes("condition") || lowerMessage.includes("recovery")) {
+      return "I've assessed your condition. I recommend starting with gentle stretching exercises and avoiding high-impact activities for now. Would you like me to create a personalized recovery plan?";
+    }
+    return "I've analyzed your request. Your fitness plan has been updated based on your goals.";
+  };
+
+  const handleConditionAssessment = () => {
+    setConditionDialogOpen(false);
+    setConditionStep(1);
+    toast({
+      title: "Condition Assessed",
+      description: "AI Health Agent has created a personalized recovery plan for you.",
+    });
+  };
+
+  return (
+    <DashboardLayout hideNavigation>
+      <div className="page-container animate-fade-in">
+
+        {/* Fitness Overview Summary */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          {fitnessOverview.map((stat, index) => (
+            <Card key={index} className="card-hover card-glass">
+              <CardContent className="pt-6">
                   <div className="flex items-center justify-between mb-3">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-md`}>
                       <stat.icon className="w-6 h-6 text-white" />
@@ -143,13 +185,13 @@ const HealthPage = () => {
                   <Progress value={stat.progress} className="h-2 mt-3" />
                 </CardContent>
               </Card>
-            ))}
-          </div>
+          ))}
+        </div>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Chat & Insights */}
-            <div className="lg:col-span-2 space-y-6">
+        {/* Main Content Grid */}
+        <div className="workspace-grid">
+          {/* Left Column - Chat & Insights */}
+          <div className="workspace-content-column">
               {/* AI Fitness Agent Chat */}
               <Card className="border-primary/20">
                 <CardHeader>

@@ -71,23 +71,23 @@ const LifestylePage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-fade-in">
+      <div className="page-container animate-fade-in">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3 tracking-tight">
-              Lifestyle & Productivity Workspace
+        <div className="page-header">
+          <div className="min-w-0 flex-1">
+            <h1 className="page-title mb-2">
+              Lifestyle & Productivity
             </h1>
-            <p className="text-muted-foreground text-base">Good Morning, Prakash 🌤 — Ready to make today balanced and productive?</p>
+            <p className="page-subtitle">Good Morning, Prakash 🌤 — Ready to make today balanced and productive?</p>
           </div>
-          <div className="flex items-center gap-2">
-            <Dialog open={habitDialogOpen} onOpenChange={setHabitDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Log Habit
-                </Button>
-              </DialogTrigger>
+          <div className="flex items-center gap-3">
+          <Dialog open={habitDialogOpen} onOpenChange={setHabitDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="shadow-sm hover:shadow-md transition-all">
+                <Plus className="w-4 h-4 mr-2" />
+                Log Habit
+              </Button>
+            </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Log Habit Completion</DialogTitle>
@@ -122,13 +122,13 @@ const LifestylePage = () => {
               </DialogContent>
             </Dialog>
 
-            <Dialog open={moodDialogOpen} onOpenChange={setMoodDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Log Mood
-                </Button>
-              </DialogTrigger>
+          <Dialog open={moodDialogOpen} onOpenChange={setMoodDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
+                <Heart className="w-4 h-4 mr-2" />
+                Log Mood
+              </Button>
+            </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>How are you feeling?</DialogTitle>
@@ -173,16 +173,16 @@ const LifestylePage = () => {
                   </Button>
                 </div>
               </DialogContent>
-            </Dialog>
+          </Dialog>
 
-            <Button variant="outline" size="icon">
-              <Download className="w-4 h-4" />
-            </Button>
-          </div>
+          <Button variant="outline" size="icon" className="shadow-sm hover:shadow-md transition-all">
+            <Download className="w-4 h-4" />
+          </Button>
         </div>
+      </div>
 
-        {/* Dashboard Overview */}
-        <Card className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/20">
+      {/* Dashboard Overview */}
+      <Card className="card-glass p-6 border-primary/20">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-foreground">Today's Overview</h2>
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
@@ -205,13 +205,13 @@ const LifestylePage = () => {
                 </p>
               </Card>
             ))}
-          </div>
-        </Card>
+        </div>
+      </Card>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - 2/3 width */}
-          <div className="lg:col-span-2 space-y-6 min-w-0">
+      {/* Main Content Grid */}
+      <div className="workspace-grid">
+        {/* Left Column - 2/3 width */}
+        <div className="workspace-content-column">
             {/* AI Agent Chat */}
             <Card className="p-4 h-[500px] flex flex-col">
               <div className="flex items-center justify-between mb-4">

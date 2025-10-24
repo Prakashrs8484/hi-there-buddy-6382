@@ -45,23 +45,23 @@ const NutritionPage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-fade-in">
+      <div className="page-container animate-fade-in">
         {/* Header */}
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-3 tracking-tight">
+        <div className="page-header">
+          <div className="min-w-0 flex-1">
+            <h1 className="page-title mb-2">
               Nutrition & Diet Workspace
             </h1>
-            <p className="text-muted-foreground text-base">Your personal nutrition lab powered by AI</p>
+            <p className="page-subtitle">Your personal nutrition lab powered by AI</p>
           </div>
-          <div className="flex gap-2">
-            <Dialog open={mealDialogOpen} onOpenChange={setMealDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Log Meal
-                </Button>
-              </DialogTrigger>
+          <div className="flex gap-3">
+          <Dialog open={mealDialogOpen} onOpenChange={setMealDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="shadow-sm hover:shadow-md transition-all">
+                <Plus className="w-4 h-4 mr-2" />
+                Log Meal
+              </Button>
+            </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Log Your Meal</DialogTitle>
@@ -106,22 +106,22 @@ const NutritionPage = () => {
                   </Button>
                 </div>
               </DialogContent>
-            </Dialog>
-            <Button variant="outline" onClick={handleLogWater}>
-              <Droplet className="w-4 h-4 mr-2" />
-              Log Water
-            </Button>
-            <Button variant="outline">
-              <Download className="w-4 h-4 mr-2" />
-              Export Report
-            </Button>
-          </div>
+          </Dialog>
+          <Button variant="outline" onClick={handleLogWater} className="shadow-sm hover:shadow-md transition-all">
+            <Droplet className="w-4 h-4 mr-2" />
+            Log Water
+          </Button>
+          <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
+            <Download className="w-4 h-4 mr-2" />
+            Export Report
+          </Button>
         </div>
+      </div>
 
-        {/* Dashboard Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {nutritionOverview.map((stat, idx) => (
-            <Card key={idx} className="relative overflow-hidden">
+      {/* Dashboard Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {nutritionOverview.map((stat, idx) => (
+          <Card key={idx} className="card-hover card-glass">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
@@ -141,11 +141,11 @@ const NutritionPage = () => {
                 <Progress value={stat.progress} className="mt-4 h-2" />
               </CardContent>
             </Card>
-          ))}
-        </div>
+        ))}
+      </div>
 
-        {/* AI Summary Card */}
-        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+      {/* AI Summary Card */}
+      <Card className="card-glass border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-full bg-primary/20">
@@ -160,12 +160,12 @@ const NutritionPage = () => {
               </div>
             </div>
           </CardContent>
-        </Card>
+      </Card>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Chat & Meals (2/3) */}
-          <div className="lg:col-span-2 space-y-6 min-w-0">
+      {/* Main Content Grid */}
+      <div className="workspace-grid">
+        {/* Left Column - Chat & Meals (2/3) */}
+        <div className="workspace-content-column">
             {/* AI Agent Chat */}
             <Card>
               <CardHeader>

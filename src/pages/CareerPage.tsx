@@ -23,25 +23,25 @@ const CareerPage = () => {
 
   return (
     <DashboardLayout hideNavigation>
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 max-w-[1600px] mx-auto animate-fade-in">
+      <div className="page-container animate-fade-in">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="min-w-0">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tight">
-              Career Agent Workspace
+        <div className="page-header">
+          <div className="min-w-0 flex-1">
+            <h1 className="page-title mb-2">
+              Career Workspace
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground">
+            <p className="page-subtitle">
               Your AI-powered Career Coach for growth, learning, and professional development
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs sm:text-sm">
-              <Target className="w-3 h-3 mr-1" />
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+              <Target className="w-4 h-4 mr-1.5" />
               Active Agent
             </Badge>
-            <Button variant="outline" size="sm" className="gap-2" onClick={handleExportReport}>
+            <Button variant="outline" size="sm" className="gap-2 shadow-sm hover:shadow-md transition-all" onClick={handleExportReport}>
               <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Export Report</span>
+              Export Report
             </Button>
           </div>
         </div>
@@ -50,10 +50,10 @@ const CareerPage = () => {
         <CareerDashboard />
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
+        <div className="workspace-grid">
           {/* Left Column - Agent Chat */}
-          <div className="xl:col-span-1 min-w-0">
-            <div className="h-[500px] sm:h-[700px]">
+          <div className="workspace-chat-column">
+            <div className="h-[600px] sm:h-[750px] lg:h-[800px]">
               <AgentChat
                 agentName="Career Coach"
                 agentIcon={Target}
@@ -70,7 +70,7 @@ const CareerPage = () => {
           </div>
 
           {/* Right Column - Career Modules */}
-          <div className="xl:col-span-2 space-y-4 sm:space-y-6 min-w-0">
+          <div className="workspace-content-column">
             {/* Career Goals Planner */}
             <CareerGoalsPlanner />
 

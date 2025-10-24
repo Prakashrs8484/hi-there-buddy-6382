@@ -30,12 +30,12 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
     // Full-screen mode with floating toggle
     return (
       <SidebarProvider defaultOpen={false}>
-        <div className="min-h-screen w-full flex">
+        <div className="min-h-screen w-full flex bg-background">
           <AppSidebar isActive={isActive} />
           <main className="flex-1 w-full overflow-auto relative">
             {/* Floating sidebar trigger */}
-            <div className="fixed top-4 left-4 z-50">
-              <SidebarTrigger className="bg-background/80 backdrop-blur-sm shadow-lg border border-border hover:bg-background" />
+            <div className="fixed top-6 left-6 z-50">
+              <SidebarTrigger className="bg-card/95 backdrop-blur-md shadow-lg border border-border/50 hover:bg-card hover:shadow-xl hover:border-border transition-all duration-200 rounded-xl p-2.5" />
             </div>
             {children}
           </main>
@@ -46,11 +46,11 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen w-full flex">
+      <div className="min-h-screen w-full flex bg-background">
         <AppSidebar isActive={isActive} />
         <main className="flex-1 w-full overflow-auto">
-          <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border p-4 md:hidden">
-            <SidebarTrigger />
+          <div className="sticky top-0 z-40 bg-card/95 backdrop-blur-md border-b border-border/50 p-4 md:hidden shadow-sm">
+            <SidebarTrigger className="hover:bg-sidebar-accent/50 transition-all duration-200 rounded-lg" />
           </div>
           {children}
         </main>
@@ -64,43 +64,74 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
   const collapsed = state === "collapsed";
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-r border-sidebar-border">
-      <SidebarHeader className="border-b border-sidebar-border p-4">
-        <Link to="/" className="flex items-center gap-2">
-          <Brain className="w-8 h-8 text-sidebar-primary flex-shrink-0" />
-          {!collapsed && <span className="text-xl font-bold text-sidebar-foreground">NeuraDesk</span>}
+    <Sidebar 
+      collapsible="offcanvas" 
+      className="border-r border-sidebar-border bg-sidebar shadow-sm transition-all duration-300"
+    >
+      <SidebarHeader className="border-b border-sidebar-border p-5">
+        <Link to="/" className="flex items-center gap-3 transition-all duration-300">
+          <div className="p-2 rounded-xl bg-primary/10">
+            <Brain className="w-6 h-6 text-primary flex-shrink-0" />
+          </div>
+          {!collapsed && (
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-sidebar-foreground">NeuraDesk</span>
+              <span className="text-xs text-muted-foreground">AI Workspace</span>
+            </div>
+          )}
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="px-2 py-4">
+      <SidebarContent className="px-3 py-4">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton asChild isActive={isActive(item.path)} tooltip={item.label}>
-                    <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            <SidebarMenu className="space-y-1">
+              {navItems.map((item) => {
+                const active = isActive(item.path);
+                return (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton 
+                      asChild 
+                      isActive={active} 
+                      tooltip={item.label}
+                      className={`
+                        transition-all duration-200 rounded-lg
+                        ${active 
+                          ? 'bg-sidebar-accent text-sidebar-accent-foreground font-medium shadow-sm' 
+                          : 'hover:bg-sidebar-accent/50 text-sidebar-foreground/70 hover:text-sidebar-foreground'
+                        }
+                      `}
+                    >
+                      <Link to={item.path} className="flex items-center gap-3 px-3 py-2">
+                        <item.icon className="w-5 h-5 flex-shrink-0" />
+                        <span className="truncate">{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-2">
-        <SidebarMenu>
+      <SidebarFooter className="border-t border-sidebar-border p-3">
+        <SidebarMenu className="space-y-1">
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Settings">
+            <SidebarMenuButton 
+              tooltip="Settings"
+              className="transition-all duration-200 rounded-lg hover:bg-sidebar-accent/50 text-sidebar-foreground/70 hover:text-sidebar-foreground"
+            >
               <Settings className="w-5 h-5" />
               <span>Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Sign Out">
+            <SidebarMenuButton 
+              asChild 
+              tooltip="Sign Out"
+              className="transition-all duration-200 rounded-lg hover:bg-sidebar-accent/50 text-sidebar-foreground/70 hover:text-sidebar-foreground"
+            >
               <Link to="/auth" className="flex items-center gap-3">
                 <LogOut className="w-5 h-5" />
                 <span>Sign Out</span>

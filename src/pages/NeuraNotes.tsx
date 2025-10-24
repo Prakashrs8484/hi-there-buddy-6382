@@ -70,65 +70,63 @@ const NeuraNotes = () => {
     <DashboardLayout>
       <div className="min-h-screen bg-background">
         {/* Header */}
-        <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+        <div className="border-b border-border/50 bg-card/95 backdrop-blur-md sticky top-0 z-10 shadow-sm">
           <div className="container-responsive py-6">
             <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              <div className="flex-1 min-w-0">
+                <h1 className="page-title text-3xl md:text-4xl mb-2">
                   NeuraNotes
                 </h1>
-                <p className="text-muted-foreground text-sm md:text-base">
+                <p className="page-subtitle">
                   Your AI-powered personal journal and knowledge workspace
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="gap-1">
-                  <Calendar className="w-3 h-3" />
-                  {notes.length} Notes
-                </Badge>
-              </div>
+              <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+                <Calendar className="w-4 h-4 mr-1.5" />
+                {notes.length} Notes
+              </Badge>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="container-responsive py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="workspace-grid">
             {/* Notes Section */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Total Notes</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{notes.length}</div>
-                    <p className="text-xs text-muted-foreground mt-1">Across all categories</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Writing Streak</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">7 days</div>
-                    <p className="text-xs text-muted-foreground mt-1">Keep it up!</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">This Week</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">12</div>
-                    <p className="text-xs text-muted-foreground mt-1">New entries</p>
-                  </CardContent>
-                </Card>
-              </div>
+            <div className="workspace-content-column">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Card className="card-hover card-glass">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium">Total Notes</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{notes.length}</div>
+                  <p className="text-xs text-muted-foreground mt-1">Across all categories</p>
+                </CardContent>
+              </Card>
+              <Card className="card-hover card-glass">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium">Writing Streak</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">7 days</div>
+                  <p className="text-xs text-muted-foreground mt-1">Keep it up!</p>
+                </CardContent>
+              </Card>
+              <Card className="card-hover card-glass">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium">This Week</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">12</div>
+                  <p className="text-xs text-muted-foreground mt-1">New entries</p>
+                </CardContent>
+              </Card>
+            </div>
 
-              {/* Note Editor */}
-              <Card>
+            {/* Note Editor */}
+            <Card className="card-glass">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Plus className="w-5 h-5" />
@@ -151,19 +149,19 @@ const NeuraNotes = () => {
                     onChange={(e) => setNoteContent(e.target.value)}
                     className="min-h-[200px] resize-none"
                   />
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <Button onClick={handleSaveNote} disabled={!noteTitle.trim() || !noteContent.trim()}>
-                      Save Note
-                    </Button>
-                    <Button variant="outline" onClick={() => { setNoteTitle(""); setNoteContent(""); }}>
-                      Clear
-                    </Button>
-                  </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Button onClick={handleSaveNote} disabled={!noteTitle.trim() || !noteContent.trim()} className="shadow-sm hover:shadow-md transition-all">
+                    Save Note
+                  </Button>
+                  <Button variant="outline" onClick={() => { setNoteTitle(""); setNoteContent(""); }} className="shadow-sm hover:shadow-md transition-all">
+                    Clear
+                  </Button>
+                </div>
                 </CardContent>
               </Card>
 
-              {/* Categories & Notes List */}
-              <Card>
+            {/* Categories & Notes List */}
+            <Card className="card-glass">
                 <CardHeader>
                   <CardTitle>Your Notes</CardTitle>
                   <CardDescription>
@@ -203,9 +201,9 @@ const NeuraNotes = () => {
                             No notes in this category yet
                           </p>
                         </div>
-                      ) : (
-                        filteredNotes.map((note) => (
-                          <Card key={note.id} className="hover:shadow-md transition-shadow">
+                    ) : (
+                      filteredNotes.map((note) => (
+                        <Card key={note.id} className="card-hover">
                             <CardHeader className="pb-3">
                               <div className="flex items-start justify-between gap-2">
                                 <CardTitle className="text-base">{note.title}</CardTitle>
@@ -241,10 +239,10 @@ const NeuraNotes = () => {
               </Card>
             </div>
 
-            {/* AI Assistant */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-24">
-                <Card className="h-[calc(100vh-8rem)]">
+          {/* AI Assistant */}
+          <div className="workspace-chat-column">
+            <div className="sticky top-24">
+              <Card className="card-glass h-[calc(100vh-8rem)]">
                   <AgentChat
                     agentName="NeuraNotes AI"
                     agentIcon={BookOpen}
