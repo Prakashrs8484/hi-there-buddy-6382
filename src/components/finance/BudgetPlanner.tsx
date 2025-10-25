@@ -34,7 +34,7 @@ export const BudgetPlanner = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-foreground">AI Budget Planner</h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            ${totalSpent.toLocaleString()} / ${totalBudget.toLocaleString()} spent
+            ₹{totalSpent.toLocaleString()} / ₹{totalBudget.toLocaleString()} spent
           </p>
         </div>
         <Button variant="outline" size="sm" className="gap-2">
@@ -65,7 +65,7 @@ export const BudgetPlanner = () => {
                 <span className="text-sm font-medium text-foreground">{category.name}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">
-                    ${category.spent} / ${category.budget}
+                    ₹{category.spent} / ₹{category.budget}
                   </span>
                   {isOverBudget && <AlertCircle className="w-4 h-4 text-destructive" />}
                 </div>
@@ -82,7 +82,7 @@ export const BudgetPlanner = () => {
               />
               {isOverBudget && (
                 <p className="text-xs text-destructive">
-                  Over budget by ${category.spent - category.budget}
+                  Over budget by ₹{category.spent - category.budget}
                 </p>
               )}
               {isNearLimit && !isOverBudget && (

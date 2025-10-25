@@ -19,7 +19,7 @@ const insights = [
   {
     type: "tip",
     title: "Optimize subscription costs",
-    description: "You could save $85/month by reviewing unused subscriptions and switching to annual plans.",
+    description: "You could save ₹85/month by reviewing unused subscriptions and switching to annual plans.",
   },
   {
     type: "success",

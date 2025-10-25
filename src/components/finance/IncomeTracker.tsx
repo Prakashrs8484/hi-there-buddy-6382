@@ -29,7 +29,7 @@ export const IncomeTracker = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-foreground">Income Trends</h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            Total this month: ${totalIncome.toLocaleString()}
+            Total this month: ₹{totalIncome.toLocaleString()}
           </p>
         </div>
         <Select value={timePeriod} onValueChange={setTimePeriod}>
@@ -87,19 +87,19 @@ export const IncomeTracker = () => {
         <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
           <p className="text-xs text-muted-foreground mb-1">Salary</p>
           <p className="text-lg font-bold text-foreground">
-            ${incomeData[incomeData.length - 1].salary.toLocaleString()}
+            ₹{incomeData[incomeData.length - 1].salary.toLocaleString()}
           </p>
         </div>
         <div className="p-3 rounded-lg bg-accent/5 border border-accent/20">
           <p className="text-xs text-muted-foreground mb-1">Freelance</p>
           <p className="text-lg font-bold text-foreground">
-            ${incomeData[incomeData.length - 1].freelance.toLocaleString()}
+            ₹{incomeData[incomeData.length - 1].freelance.toLocaleString()}
           </p>
         </div>
         <div className="p-3 rounded-lg bg-secondary/20 border border-border/50">
           <p className="text-xs text-muted-foreground mb-1">Other</p>
           <p className="text-lg font-bold text-foreground">
-            ${incomeData[incomeData.length - 1].other.toLocaleString()}
+            ₹{incomeData[incomeData.length - 1].other.toLocaleString()}
           </p>
         </div>
       </div>

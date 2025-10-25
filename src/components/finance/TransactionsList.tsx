@@ -189,7 +189,7 @@ export const TransactionsList = () => {
                         transaction.type === "income" ? "text-success" : "text-foreground"
                       }`}
                     >
-                      {transaction.type === "income" ? "+" : "-"}${transaction.amount}
+                      {transaction.type === "income" ? "+" : "-"}₹{transaction.amount}
                     </span>
                   </TableCell>
                 </TableRow>

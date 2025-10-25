@@ -35,7 +35,7 @@ export const ExpenseTracker = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-foreground">Expense Breakdown</h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            Total: ${totalExpenses.toLocaleString()} this {timePeriod}
+            Total: ₹{totalExpenses.toLocaleString()} this {timePeriod}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -118,7 +118,7 @@ export const ExpenseTracker = () => {
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
             <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground truncate">{item.category}</p>
-              <p className="text-sm font-semibold text-foreground">${item.amount}</p>
+              <p className="text-sm font-semibold text-foreground">₹{item.amount}</p>
             </div>
           </div>
         ))}

@@ -240,7 +240,7 @@ const FinancePage = () => {
 const financialStats = [
   { 
     label: "Monthly Income", 
-    value: "$5,200", 
+    value: "₹5,200", 
     change: "+8%", 
     icon: TrendingUp,
     bgColor: "bg-success/10",
@@ -249,7 +249,7 @@ const financialStats = [
   },
   { 
     label: "Total Expenses", 
-    value: "$3,180", 
+    value: "₹3,180", 
     change: "-5%", 
     icon: PiggyBank,
     bgColor: "bg-destructive/10",
@@ -258,7 +258,7 @@ const financialStats = [
   },
   { 
     label: "Net Savings", 
-    value: "$2,020", 
+    value: "₹2,020", 
     change: "+15%", 
     icon: DollarSign,
     bgColor: "bg-primary/10",

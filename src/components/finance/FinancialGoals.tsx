@@ -61,7 +61,7 @@ export const FinancialGoals = () => {
             <h3 className="text-lg sm:text-xl font-semibold text-foreground">Financial Goals</h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            ${totalSaved.toLocaleString()} saved of ${totalTarget.toLocaleString()} total goals
+            ₹{totalSaved.toLocaleString()} saved of ₹{totalTarget.toLocaleString()} total goals
           </p>
         </div>
         <Button variant="outline" size="sm" className="gap-2">
@@ -100,13 +100,13 @@ export const FinancialGoals = () => {
                 <div>
                   <span className="text-muted-foreground">Saved: </span>
                   <span className="font-semibold text-foreground">
-                    ${goal.current.toLocaleString()}
+                    ₹{goal.current.toLocaleString()}
                   </span>
                 </div>
                 <div>
                   <span className="text-muted-foreground">Target: </span>
                   <span className="font-semibold text-foreground">
-                    ${goal.target.toLocaleString()}
+                    ₹{goal.target.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -116,7 +116,7 @@ export const FinancialGoals = () => {
                   <div className="flex items-center gap-2 text-xs">
                     <TrendingUp className="w-3 h-3 text-primary" />
                     <span className="text-muted-foreground">
-                      Save <span className="font-semibold text-foreground">${monthlyNeeded}</span> monthly
+                      Save <span className="font-semibold text-foreground">₹{monthlyNeeded}</span> monthly
                       to reach goal on time
                     </span>
                   </div>
