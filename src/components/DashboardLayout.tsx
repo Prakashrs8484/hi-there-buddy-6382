@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Brain, LayoutDashboard, Target, TrendingUp, Heart, Apple, Clock, BookOpen, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   Sidebar,
   SidebarContent,
@@ -33,9 +34,10 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
         <div className="min-h-screen w-full flex bg-background">
           <AppSidebar isActive={isActive} />
           <main className="flex-1 w-full overflow-auto relative">
-            {/* Floating sidebar trigger */}
-            <div className="fixed top-8 left-8 z-50">
+            {/* Floating controls */}
+            <div className="fixed top-8 left-8 z-50 flex items-center gap-3">
               <SidebarTrigger className="bg-card backdrop-blur-md shadow-lg border border-border hover:bg-card hover:shadow-xl hover:border-primary/30 transition-all duration-200 rounded-2xl p-3" />
+              <ThemeToggle />
             </div>
             {children}
           </main>
@@ -49,8 +51,9 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
       <div className="min-h-screen w-full flex bg-background">
         <AppSidebar isActive={isActive} />
         <main className="flex-1 w-full overflow-auto">
-          <div className="sticky top-0 z-40 bg-card/98 backdrop-blur-md border-b border-border p-5 md:hidden shadow-md">
+          <div className="sticky top-0 z-40 bg-card/98 backdrop-blur-md border-b border-border p-5 md:hidden shadow-md flex items-center justify-between">
             <SidebarTrigger className="hover:bg-sidebar-accent transition-all duration-200 rounded-xl" />
+            <ThemeToggle />
           </div>
           {children}
         </main>
@@ -117,6 +120,11 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
 
       <SidebarFooter className="border-t border-sidebar-border p-4">
         <SidebarMenu className="space-y-1.5">
+          <SidebarMenuItem>
+            <div className="flex items-center justify-center px-2 py-1">
+              <ThemeToggle />
+            </div>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton 
               tooltip="Settings"
