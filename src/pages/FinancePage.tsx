@@ -1,4 +1,4 @@
-import { DollarSign, TrendingUp, Target, PiggyBank, Plus, FileText, Download } from "lucide-react";
+import { IndianRupee, TrendingUp, Target, PiggyBank, Plus, FileText, Download } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import AgentChat from "@/components/AgentChat";
 import { Card } from "@/components/ui/card";
@@ -34,7 +34,7 @@ const FinancePage = () => {
             <p className="page-subtitle">AI-powered financial planning, tracking, and insights</p>
           </div>
           <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
-            <DollarSign className="w-4 h-4 mr-1.5" />
+            <IndianRupee className="w-4 h-4 mr-1.5" />
             Active Agent
           </Badge>
         </div>
@@ -169,7 +169,7 @@ const FinancePage = () => {
             <div className="h-[600px] sm:h-[750px] lg:h-[800px]">
               <AgentChat
                 agentName="Finance Agent"
-                agentIcon={DollarSign}
+                agentIcon={IndianRupee}
                 placeholder="Ask about budgets, expenses, savings, investments..."
                 initialMessages={[
                   {
@@ -260,7 +260,7 @@ const financialStats = [
     label: "Net Savings", 
     value: "₹2,020", 
     change: "+15%", 
-    icon: DollarSign,
+    icon: IndianRupee,
     bgColor: "bg-primary/10",
     iconColor: "text-primary",
     changeColor: "text-success"
