@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Brain, LayoutDashboard, Target, TrendingUp, Heart, Apple, Clock, BookOpen, Settings, LogOut } from "lucide-react";
+import { Brain, LayoutDashboard, Target, TrendingUp, Heart, Apple, Clock, BookOpen, Settings, LogOut, Menu } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
@@ -16,6 +16,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -24,42 +25,47 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutProps) => {
   const location = useLocation();
-
   const isActive = (path: string) => location.pathname === path;
 
-  if (hideNavigation) {
-    // Full-screen mode with floating toggle
-    return (
-      <SidebarProvider defaultOpen={false}>
-        <div className="min-h-screen w-full flex bg-background">
-          <AppSidebar isActive={isActive} />
-          <main className="flex-1 w-full overflow-auto relative">
-            {/* Floating controls */}
-            <div className="fixed top-4 left-4 sm:top-6 sm:left-6 lg:top-8 lg:left-8 z-50 flex items-center gap-3">
-              <SidebarTrigger className="bg-card backdrop-blur-md shadow-lg border border-border hover:bg-card hover:shadow-xl hover:border-primary/30 transition-all duration-200 rounded-2xl p-3" />
-              <ThemeToggle />
-            </div>
-            {/* Add padding to prevent overlap */}
-            <div className="pt-20 sm:pt-24 px-4 sm:px-6 lg:px-8">
-              {children}
-            </div>
-          </main>
-        </div>
-      </SidebarProvider>
-    );
-  }
-
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen w-full flex bg-background">
-        <AppSidebar isActive={isActive} />
-        <main className="flex-1 w-full overflow-auto">
-          {/* Mobile header with proper height */}
-          <div className="sticky top-0 z-40 bg-card/98 backdrop-blur-md border-b border-border px-4 py-4 md:hidden shadow-md flex items-center justify-between min-h-[60px]">
-            <SidebarTrigger className="hover:bg-sidebar-accent transition-all duration-200 rounded-xl" />
-            <ThemeToggle />
+    <SidebarProvider defaultOpen={false}>
+      <div className="min-h-screen w-full flex flex-col bg-background">
+        {/* Fixed Header - Always visible */}
+        <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-card/98 backdrop-blur-md border-b border-border shadow-sm">
+          <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            {/* Logo - Left */}
+            <Link to="/" className="flex items-center gap-3 transition-all duration-300 hover:opacity-80">
+              <div className="p-2 rounded-xl bg-primary/10 shadow-sm">
+                <Brain className="w-6 h-6 text-primary flex-shrink-0" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold text-foreground tracking-tight">NeuraDesk</span>
+                <span className="text-xs text-muted-foreground hidden sm:block">AI Workspace</span>
+              </div>
+            </Link>
+
+            {/* Controls - Right */}
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <SidebarTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className="rounded-xl border-border/40 bg-card/80 backdrop-blur-md hover:bg-card hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md"
+                  aria-label="Toggle menu"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SidebarTrigger>
+            </div>
           </div>
-          {/* Content wrapper with padding to prevent overlap */}
+        </header>
+
+        {/* Sidebar */}
+        <AppSidebar isActive={isActive} />
+
+        {/* Main Content - with top padding for fixed header */}
+        <main className="flex-1 w-full pt-16 overflow-auto">
           <div className="w-full">
             {children}
           </div>
@@ -70,49 +76,33 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
 };
 
 const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
-
   return (
     <Sidebar 
+      side="right"
       collapsible="offcanvas" 
-      className="border-r border-sidebar-border bg-sidebar shadow-sm transition-all duration-300"
+      className="border-l border-sidebar-border bg-sidebar shadow-lg transition-all duration-300 top-16"
     >
-      <SidebarHeader className="border-b border-sidebar-border p-6">
-        <Link to="/" className="flex items-center gap-3 transition-all duration-300">
-          <div className="p-2.5 rounded-2xl bg-primary/10 shadow-sm">
-            <Brain className="w-6 h-6 text-primary flex-shrink-0" />
-          </div>
-          {!collapsed && (
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-sidebar-foreground tracking-tight">NeuraDesk</span>
-              <span className="text-xs text-muted-foreground">AI Workspace</span>
-            </div>
-          )}
-        </Link>
-      </SidebarHeader>
 
-      <SidebarContent className="px-3 py-6">
+      <SidebarContent className="px-4 py-6">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1.5">
+            <SidebarMenu className="space-y-2">
               {navItems.map((item) => {
                 const active = isActive(item.path);
                 return (
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton 
                       asChild 
-                      isActive={active} 
-                      tooltip={item.label}
+                      isActive={active}
                       className={`
-                        transition-all duration-200 rounded-xl h-11
+                        transition-all duration-200 rounded-xl h-12
                         ${active 
                           ? 'bg-primary/10 text-primary font-medium shadow-sm border border-primary/20' 
                           : 'hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground border border-transparent'
                         }
                       `}
                     >
-                      <Link to={item.path} className="flex items-center gap-3 px-4 py-2.5">
+                      <Link to={item.path} className="flex items-center gap-3 px-4 py-3">
                         <item.icon className="w-5 h-5 flex-shrink-0" />
                         <span className="truncate">{item.label}</span>
                       </Link>
@@ -126,16 +116,10 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-4">
-        <SidebarMenu className="space-y-1.5">
-          <SidebarMenuItem>
-            <div className="flex items-center justify-center px-2 py-1">
-              <ThemeToggle />
-            </div>
-          </SidebarMenuItem>
+        <SidebarMenu className="space-y-2">
           <SidebarMenuItem>
             <SidebarMenuButton 
-              tooltip="Settings"
-              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-11"
+              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-12"
             >
               <Settings className="w-5 h-5" />
               <span>Settings</span>
@@ -144,8 +128,7 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
           <SidebarMenuItem>
             <SidebarMenuButton 
               asChild 
-              tooltip="Sign Out"
-              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-11"
+              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-12"
             >
               <Link to="/auth" className="flex items-center gap-3">
                 <LogOut className="w-5 h-5" />
