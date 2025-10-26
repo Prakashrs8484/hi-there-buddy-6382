@@ -31,37 +31,35 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
     <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen w-full flex flex-col bg-background">
         {/* Fixed Header - Always visible */}
-        <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-card/98 backdrop-blur-md border-b border-border shadow-sm">
-          <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-card/95 backdrop-blur-lg border-b border-border/50 shadow-sm">
+          <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between max-w-[1920px] mx-auto">
             {/* Logo - Left */}
-            <Link to="/" className="flex items-center gap-3 transition-all duration-300 hover:opacity-80">
-              <div className="p-2 rounded-xl bg-primary/10 shadow-sm">
-                <Brain className="w-6 h-6 text-primary flex-shrink-0" />
+            <Link to="/" className="flex items-center gap-2.5 transition-opacity duration-200 hover:opacity-80">
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <Brain className="w-5 h-5 text-primary flex-shrink-0" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold text-foreground tracking-tight">NeuraDesk</span>
-                <span className="text-xs text-muted-foreground hidden sm:block">AI Workspace</span>
+                <span className="text-base font-semibold text-foreground tracking-tight">NeuraDesk</span>
+                <span className="text-[10px] text-muted-foreground hidden sm:block font-normal">AI Workspace</span>
               </div>
             </Link>
 
             {/* Controls - Right */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <ThemeToggle />
-              <SidebarTrigger className="h-10 w-10 rounded-xl border-border/40 bg-card/80 backdrop-blur-md hover:bg-card hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md">
-                <Menu className="h-5 w-5" />
+              <SidebarTrigger className="h-9 w-9 rounded-lg border border-border/40 bg-background/50 hover:bg-accent/50 hover:border-primary/30 transition-all duration-200">
+                <Menu className="h-4 w-4" />
               </SidebarTrigger>
             </div>
           </div>
         </header>
 
-        {/* Sidebar */}
+        {/* Sidebar - slides from left */}
         <AppSidebar isActive={isActive} />
 
         {/* Main Content - with top padding for fixed header */}
-        <main className="flex-1 w-full pt-16 overflow-auto">
-          <div className="w-full">
-            {children}
-          </div>
+        <main className="flex-1 w-full pt-16">
+          {children}
         </main>
       </div>
     </SidebarProvider>
@@ -69,17 +67,25 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
 };
 
 const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
+  const { open } = useSidebar();
+  
   return (
-    <Sidebar 
-      side="right"
-      collapsible="offcanvas" 
-      className="border-l border-sidebar-border bg-sidebar shadow-lg transition-all duration-300 top-16"
-    >
+    <>
+      {/* Backdrop overlay with blur */}
+      {open && (
+        <div className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40 animate-fade-in" />
+      )}
+      
+      <Sidebar 
+        side="left"
+        collapsible="offcanvas" 
+        className="border-r border-sidebar-border bg-sidebar/95 backdrop-blur-xl shadow-2xl transition-transform duration-300 ease-out top-16 z-50"
+      >
 
-      <SidebarContent className="px-4 py-6">
+      <SidebarContent className="px-3 py-4">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-2">
+            <SidebarMenu className="space-y-1">
               {navItems.map((item) => {
                 const active = isActive(item.path);
                 return (
@@ -88,16 +94,16 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
                       asChild 
                       isActive={active}
                       className={`
-                        transition-all duration-200 rounded-xl h-12
+                        transition-all duration-200 rounded-lg h-10 font-normal
                         ${active 
-                          ? 'bg-primary/10 text-primary font-medium shadow-sm border border-primary/20' 
-                          : 'hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground border border-transparent'
+                          ? 'bg-primary/10 text-primary font-medium border border-primary/20' 
+                          : 'hover:bg-sidebar-accent text-sidebar-foreground/70 hover:text-sidebar-foreground border border-transparent'
                         }
                       `}
                     >
-                      <Link to={item.path} className="flex items-center gap-3 px-4 py-3">
-                        <item.icon className="w-5 h-5 flex-shrink-0" />
-                        <span className="truncate">{item.label}</span>
+                      <Link to={item.path} className="flex items-center gap-3 px-3 py-2">
+                        <item.icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="truncate text-sm">{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -108,30 +114,31 @@ const AppSidebar = ({ isActive }: { isActive: (path: string) => boolean }) => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-4">
-        <SidebarMenu className="space-y-2">
+      <SidebarFooter className="border-t border-sidebar-border p-3">
+        <SidebarMenu className="space-y-1">
           <SidebarMenuItem>
             <SidebarMenuButton 
-              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-12"
+              className="transition-all duration-200 rounded-lg hover:bg-sidebar-accent text-sidebar-foreground/70 hover:text-sidebar-foreground h-10 font-normal"
             >
-              <Settings className="w-5 h-5" />
-              <span>Settings</span>
+              <Settings className="w-4 h-4" />
+              <span className="text-sm">Settings</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton 
               asChild 
-              className="transition-all duration-200 rounded-xl hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground h-12"
+              className="transition-all duration-200 rounded-lg hover:bg-sidebar-accent text-sidebar-foreground/70 hover:text-sidebar-foreground h-10 font-normal"
             >
               <Link to="/auth" className="flex items-center gap-3">
-                <LogOut className="w-5 h-5" />
-                <span>Sign Out</span>
+                <LogOut className="w-4 h-4" />
+                <span className="text-sm">Sign Out</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
+    </>
   );
 };
 
