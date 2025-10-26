@@ -35,11 +35,14 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
           <AppSidebar isActive={isActive} />
           <main className="flex-1 w-full overflow-auto relative">
             {/* Floating controls */}
-            <div className="fixed top-8 left-8 z-50 flex items-center gap-3">
+            <div className="fixed top-4 left-4 sm:top-6 sm:left-6 lg:top-8 lg:left-8 z-50 flex items-center gap-3">
               <SidebarTrigger className="bg-card backdrop-blur-md shadow-lg border border-border hover:bg-card hover:shadow-xl hover:border-primary/30 transition-all duration-200 rounded-2xl p-3" />
               <ThemeToggle />
             </div>
-            {children}
+            {/* Add padding to prevent overlap */}
+            <div className="pt-20 sm:pt-24 px-4 sm:px-6 lg:px-8">
+              {children}
+            </div>
           </main>
         </div>
       </SidebarProvider>
@@ -51,11 +54,15 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
       <div className="min-h-screen w-full flex bg-background">
         <AppSidebar isActive={isActive} />
         <main className="flex-1 w-full overflow-auto">
-          <div className="sticky top-0 z-40 bg-card/98 backdrop-blur-md border-b border-border p-5 md:hidden shadow-md flex items-center justify-between">
+          {/* Mobile header with proper height */}
+          <div className="sticky top-0 z-40 bg-card/98 backdrop-blur-md border-b border-border px-4 py-4 md:hidden shadow-md flex items-center justify-between min-h-[60px]">
             <SidebarTrigger className="hover:bg-sidebar-accent transition-all duration-200 rounded-xl" />
             <ThemeToggle />
           </div>
-          {children}
+          {/* Content wrapper with padding to prevent overlap */}
+          <div className="w-full">
+            {children}
+          </div>
         </main>
       </div>
     </SidebarProvider>
