@@ -47,15 +47,8 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
             {/* Controls - Right */}
             <div className="flex items-center gap-3">
               <ThemeToggle />
-              <SidebarTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  className="rounded-xl border-border/40 bg-card/80 backdrop-blur-md hover:bg-card hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md"
-                  aria-label="Toggle menu"
-                >
-                  <Menu className="h-5 w-5" />
-                </Button>
+              <SidebarTrigger className="h-10 w-10 rounded-xl border-border/40 bg-card/80 backdrop-blur-md hover:bg-card hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md">
+                <Menu className="h-5 w-5" />
               </SidebarTrigger>
             </div>
           </div>
