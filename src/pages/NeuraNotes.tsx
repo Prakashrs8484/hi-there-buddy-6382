@@ -68,32 +68,23 @@ const NeuraNotes = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-background">
+      <div className="page-container animate-fade-in">
         {/* Header */}
-        <div className="border-b border-border/50 bg-card/95 backdrop-blur-md sticky top-0 z-10 shadow-sm">
-          <div className="container-responsive py-6">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <div className="flex-1 min-w-0">
-                <h1 className="page-title text-3xl md:text-4xl mb-2">
-                  NeuraNotes
-                </h1>
-                <p className="page-subtitle">
-                  Your AI-powered personal journal and knowledge workspace
-                </p>
-              </div>
-              <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
-                <Calendar className="w-4 h-4 mr-1.5" />
-                {notes.length} Notes
-              </Badge>
-            </div>
+        <div className="page-header">
+          <div className="min-w-0 flex-1">
+            <h1 className="page-title mb-2">NeuraNotes</h1>
+            <p className="page-subtitle">Your AI-powered personal journal and knowledge workspace</p>
           </div>
+          <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+            <Calendar className="w-4 h-4 mr-1.5" />
+            {notes.length} Notes
+          </Badge>
         </div>
 
         {/* Main Content */}
-        <div className="container-responsive py-6">
-          <div className="workspace-grid">
-            {/* Notes Section */}
-            <div className="workspace-content-column">
+        <div className="workspace-grid">
+          {/* Notes Section */}
+          <div className="workspace-content-column">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Card className="card-hover card-glass">
@@ -127,28 +118,28 @@ const NeuraNotes = () => {
 
             {/* Note Editor */}
             <Card className="card-glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Plus className="w-5 h-5" />
-                    Create New Note
-                  </CardTitle>
-                  <CardDescription>
-                    Write your thoughts, learnings, or reflections
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Input
-                    placeholder="Note title..."
-                    value={noteTitle}
-                    onChange={(e) => setNoteTitle(e.target.value)}
-                    className="text-lg font-semibold"
-                  />
-                  <Textarea
-                    placeholder="Start writing... (Supports markdown)"
-                    value={noteContent}
-                    onChange={(e) => setNoteContent(e.target.value)}
-                    className="min-h-[200px] resize-none"
-                  />
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Plus className="w-5 h-5" />
+                  Create New Note
+                </CardTitle>
+                <CardDescription>
+                  Write your thoughts, learnings, or reflections
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Input
+                  placeholder="Note title..."
+                  value={noteTitle}
+                  onChange={(e) => setNoteTitle(e.target.value)}
+                  className="text-lg font-semibold"
+                />
+                <Textarea
+                  placeholder="Start writing... (Supports markdown)"
+                  value={noteContent}
+                  onChange={(e) => setNoteContent(e.target.value)}
+                  className="min-h-[200px] resize-none"
+                />
                 <div className="flex items-center gap-2 flex-wrap">
                   <Button onClick={handleSaveNote} disabled={!noteTitle.trim() || !noteContent.trim()} className="shadow-sm hover:shadow-md transition-all">
                     Save Note
@@ -157,106 +148,105 @@ const NeuraNotes = () => {
                     Clear
                   </Button>
                 </div>
-                </CardContent>
-              </Card>
+              </CardContent>
+            </Card>
 
             {/* Categories & Notes List */}
             <Card className="card-glass">
-                <CardHeader>
-                  <CardTitle>Your Notes</CardTitle>
-                  <CardDescription>
-                    Organized and accessible
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <ScrollArea className="w-full">
-                      <TabsList className="inline-flex w-full min-w-max">
-                        {categories.map((cat) => (
-                          <TabsTrigger key={cat.id} value={cat.id} className="gap-2">
-                            <cat.icon className="w-4 h-4" />
-                            <span className="hidden sm:inline">{cat.label}</span>
-                          </TabsTrigger>
-                        ))}
-                      </TabsList>
-                    </ScrollArea>
+              <CardHeader>
+                <CardTitle>Your Notes</CardTitle>
+                <CardDescription>
+                  Organized and accessible
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <ScrollArea className="w-full">
+                    <TabsList className="inline-flex w-full min-w-max">
+                      {categories.map((cat) => (
+                        <TabsTrigger key={cat.id} value={cat.id} className="gap-2">
+                          <cat.icon className="w-4 h-4" />
+                          <span className="hidden sm:inline">{cat.label}</span>
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </ScrollArea>
 
-                    <TabsContent value={selectedCategory} className="mt-4 space-y-3">
-                      {selectedCategory === "diary" && diaryLocked ? (
-                        <div className="text-center py-12">
-                          <Lock className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                          <h3 className="text-lg font-semibold mb-2">Private Diary Locked</h3>
-                          <p className="text-sm text-muted-foreground mb-4">
-                            Your personal thoughts are protected
-                          </p>
-                          <Button onClick={() => setDiaryLocked(false)} variant="outline">
-                            <Unlock className="w-4 h-4 mr-2" />
-                            Unlock Diary
-                          </Button>
-                        </div>
-                      ) : filteredNotes.length === 0 ? (
-                        <div className="text-center py-12">
-                          <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                          <p className="text-muted-foreground">
-                            No notes in this category yet
-                          </p>
-                        </div>
+                  <TabsContent value={selectedCategory} className="mt-4 space-y-3">
+                    {selectedCategory === "diary" && diaryLocked ? (
+                      <div className="text-center py-12">
+                        <Lock className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                        <h3 className="text-lg font-semibold mb-2">Private Diary Locked</h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Your personal thoughts are protected
+                        </p>
+                        <Button onClick={() => setDiaryLocked(false)} variant="outline">
+                          <Unlock className="w-4 h-4 mr-2" />
+                          Unlock Diary
+                        </Button>
+                      </div>
+                    ) : filteredNotes.length === 0 ? (
+                      <div className="text-center py-12">
+                        <FileText className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                        <p className="text-muted-foreground">
+                          No notes in this category yet
+                        </p>
+                      </div>
                     ) : (
                       filteredNotes.map((note) => (
                         <Card key={note.id} className="card-hover">
-                            <CardHeader className="pb-3">
-                              <div className="flex items-start justify-between gap-2">
-                                <CardTitle className="text-base">{note.title}</CardTitle>
-                                <Badge variant="outline" className="text-xs">
-                                  {categories.find(c => c.id === note.category)?.label}
-                                </Badge>
+                          <CardHeader className="pb-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <CardTitle className="text-base">{note.title}</CardTitle>
+                              <Badge variant="outline" className="text-xs">
+                                {categories.find(c => c.id === note.category)?.label}
+                              </Badge>
+                            </div>
+                            <CardDescription className="text-xs">
+                              {note.createdAt.toLocaleDateString()} at {note.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-sm text-foreground/80 line-clamp-2">
+                              {note.content}
+                            </p>
+                            {note.tags.length > 0 && (
+                              <div className="flex gap-1 mt-3">
+                                {note.tags.map((tag, idx) => (
+                                  <Badge key={idx} variant="secondary" className="text-xs">
+                                    <Tag className="w-3 h-3 mr-1" />
+                                    {tag}
+                                  </Badge>
+                                ))}
                               </div>
-                              <CardDescription className="text-xs">
-                                {note.createdAt.toLocaleDateString()} at {note.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                              </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                              <p className="text-sm text-foreground/80 line-clamp-2">
-                                {note.content}
-                              </p>
-                              {note.tags.length > 0 && (
-                                <div className="flex gap-1 mt-3">
-                                  {note.tags.map((tag, idx) => (
-                                    <Badge key={idx} variant="secondary" className="text-xs">
-                                      <Tag className="w-3 h-3 mr-1" />
-                                      {tag}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              )}
-                            </CardContent>
-                          </Card>
-                        ))
-                      )}
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
-            </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))
+                    )}
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* AI Assistant */}
           <div className="workspace-chat-column">
-            <div className="sticky top-24">
-              <Card className="card-glass h-[calc(100vh-8rem)]">
-                  <AgentChat
-                    agentName="NeuraNotes AI"
-                    agentIcon={BookOpen}
-                    placeholder="Ask me to summarize, organize, or analyze your notes..."
-                    initialMessages={[
-                      {
-                        role: "agent",
-                        content: "Hello! I'm your NeuraNotes AI assistant. I can help you organize your notes, suggest topics, summarize past entries, and provide writing insights. How can I assist you today?",
-                        timestamp: new Date(),
-                      },
-                    ]}
-                  />
-                </Card>
-              </div>
+            <div className="sticky top-20">
+              <Card className="card-glass h-[calc(100vh-6rem)]">
+                <AgentChat
+                  agentName="NeuraNotes AI"
+                  agentIcon={BookOpen}
+                  placeholder="Ask me to summarize, organize, or analyze your notes..."
+                  initialMessages={[
+                    {
+                      role: "agent",
+                      content: "Hello! I'm your NeuraNotes AI assistant. I can help you organize your notes, suggest topics, summarize past entries, and provide writing insights. How can I assist you today?",
+                      timestamp: new Date(),
+                    },
+                  ]}
+                />
+              </Card>
             </div>
           </div>
         </div>

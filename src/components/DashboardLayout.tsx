@@ -58,7 +58,7 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
         <AppSidebar isActive={isActive} />
 
         {/* Main Content - with top padding for fixed header */}
-        <main className="flex-1 w-full pt-16">
+        <main className="flex-1 w-full pt-16 min-h-[calc(100vh-4rem)] overflow-x-hidden">
           {children}
         </main>
       </div>

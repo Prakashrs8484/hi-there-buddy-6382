@@ -142,7 +142,7 @@ All colors MUST be HSL.
   
   /* Page layout utilities - tight, clean spacing */
   .page-container {
-    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5;
+    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6;
   }
   
   .page-header {
