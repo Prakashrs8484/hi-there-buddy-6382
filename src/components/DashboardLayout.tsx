@@ -29,7 +29,7 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
 
   return (
     <SidebarProvider defaultOpen={false}>
-      <div className="min-h-screen w-full flex flex-col bg-background">
+      <div className="min-h-screen w-full bg-background">
         {/* Fixed Header - Always visible */}
         <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-card/95 backdrop-blur-lg border-b border-border/50 shadow-sm">
           <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between max-w-[1920px] mx-auto">
@@ -54,13 +54,15 @@ const DashboardLayout = ({ children, hideNavigation = false }: DashboardLayoutPr
           </div>
         </header>
 
-        {/* Sidebar - slides from left */}
-        <AppSidebar isActive={isActive} />
+        {/* Content Row: Sidebar + Main */}
+        <div className="flex w-full pt-16">
+          <AppSidebar isActive={isActive} />
 
-        {/* Main Content - with top padding for fixed header */}
-        <main className="flex-1 w-full pt-16 min-h-[calc(100vh-4rem)] overflow-x-hidden">
-          {children}
-        </main>
+          {/* Main Content */}
+          <main className="flex-1 min-h-[calc(100svh-4rem)] overflow-x-hidden">
+            {children}
+          </main>
+        </div>
       </div>
     </SidebarProvider>
   );
