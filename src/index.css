@@ -142,11 +142,11 @@ All colors MUST be HSL.
   
   /* Page layout utilities - tight, clean spacing */
   .page-container {
-    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-6;
+    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-4;
   }
   
   .page-header {
-    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5;
+    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-3;
   }
   
   .page-title {
@@ -159,7 +159,7 @@ All colors MUST be HSL.
   
   /* Workspace grid layouts with tight, consistent spacing */
   .workspace-grid {
-    @apply grid grid-cols-1 xl:grid-cols-3 gap-5 mt-5;
+    @apply grid grid-cols-1 xl:grid-cols-3 gap-4 mt-3;
   }
   
   .workspace-chat-column {
@@ -167,7 +167,7 @@ All colors MUST be HSL.
   }
   
   .workspace-content-column {
-    @apply xl:col-span-2 space-y-5 min-w-0;
+    @apply xl:col-span-2 space-y-4 min-w-0;
   }
   
   /* Elegant card styles with soft shadows */
