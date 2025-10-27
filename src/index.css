@@ -140,13 +140,13 @@ All colors MUST be HSL.
     }
   }
   
-  /* Page layout utilities - clean spacing with breathing room */
+  /* Page layout utilities - tight, clean spacing */
   .page-container {
-    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8;
+    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5;
   }
   
   .page-header {
-    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6;
+    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5;
   }
   
   .page-title {
@@ -157,9 +157,9 @@ All colors MUST be HSL.
     @apply text-sm sm:text-base text-muted-foreground mt-1.5 leading-relaxed font-normal;
   }
   
-  /* Workspace grid layouts with clean spacing */
+  /* Workspace grid layouts with tight, consistent spacing */
   .workspace-grid {
-    @apply grid grid-cols-1 xl:grid-cols-3 gap-6;
+    @apply grid grid-cols-1 xl:grid-cols-3 gap-5 mt-5;
   }
   
   .workspace-chat-column {
@@ -167,7 +167,7 @@ All colors MUST be HSL.
   }
   
   .workspace-content-column {
-    @apply xl:col-span-2 space-y-6 min-w-0;
+    @apply xl:col-span-2 space-y-5 min-w-0;
   }
   
   /* Elegant card styles with soft shadows */
