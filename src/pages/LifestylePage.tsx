@@ -75,15 +75,15 @@ const LifestylePage = () => {
         {/* Header */}
         <div className="page-header">
           <div className="min-w-0 flex-1">
-            <h1 className="page-title mb-2">
+            <h1 className="page-title">
               Lifestyle & Productivity
             </h1>
             <p className="page-subtitle">Good Morning, Prakash 🌤 — Ready to make today balanced and productive?</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="page-actions">
           <Dialog open={habitDialogOpen} onOpenChange={setHabitDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="shadow-sm hover:shadow-md transition-all">
+              <Button className="action-button">
                 <Plus className="w-4 h-4 mr-2" />
                 Log Habit
               </Button>
@@ -124,7 +124,7 @@ const LifestylePage = () => {
 
           <Dialog open={moodDialogOpen} onOpenChange={setMoodDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
+              <Button variant="outline" className="action-button">
                 <Heart className="w-4 h-4 mr-2" />
                 Log Mood
               </Button>
@@ -175,7 +175,7 @@ const LifestylePage = () => {
               </DialogContent>
           </Dialog>
 
-          <Button variant="outline" size="icon" className="shadow-sm hover:shadow-md transition-all">
+          <Button variant="outline" size="icon" className="action-button">
             <Download className="w-4 h-4" />
           </Button>
         </div>

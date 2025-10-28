@@ -57,17 +57,17 @@ const HealthPage = () => {
         {/* Header */}
         <div className="page-header">
           <div className="min-w-0 flex-1">
-            <h1 className="page-title mb-2">
+            <h1 className="page-title">
               Health & Fitness Workspace
             </h1>
             <p className="page-subtitle">
               Your AI-powered fitness command center — Plan, Track, Optimize
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="page-actions">
             <Dialog open={activityDialogOpen} onOpenChange={setActivityDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="shadow-sm hover:shadow-md transition-all">
+                <Button className="action-button">
                   <Plus className="w-4 h-4 mr-2" />
                   Log Activity
                 </Button>
@@ -116,7 +116,7 @@ const HealthPage = () => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
+            <Button variant="outline" className="action-button">
               <BarChart3 className="w-4 h-4 mr-2" />
               Generate Report
             </Button>

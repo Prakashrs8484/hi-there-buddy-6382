@@ -27,19 +27,19 @@ const CareerPage = () => {
         {/* Header */}
         <div className="page-header">
           <div className="min-w-0 flex-1">
-            <h1 className="page-title mb-2">
+            <h1 className="page-title">
               Career Workspace
             </h1>
             <p className="page-subtitle">
               Your AI-powered Career Coach for growth, learning, and professional development
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+          <div className="page-actions">
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
               <Target className="w-4 h-4 mr-1.5" />
               Active Agent
             </Badge>
-            <Button variant="outline" size="sm" className="gap-2 shadow-sm hover:shadow-md transition-all" onClick={handleExportReport}>
+            <Button variant="outline" size="sm" className="action-button gap-2" onClick={handleExportReport}>
               <Download className="w-4 h-4" />
               Export Report
             </Button>

@@ -28,22 +28,22 @@ const FinancePage = () => {
         {/* Header */}
         <div className="page-header">
           <div className="min-w-0 flex-1">
-            <h1 className="page-title mb-2">
+            <h1 className="page-title">
               Finance Workspace
             </h1>
             <p className="page-subtitle">AI-powered financial planning, tracking, and insights</p>
           </div>
-          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
             <IndianRupee className="w-4 h-4 mr-1.5" />
             Active Agent
           </Badge>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="page-actions mb-4">
           <Dialog open={addExpenseOpen} onOpenChange={setAddExpenseOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+              <Button variant="outline" className="action-button gap-2">
                 <Plus className="w-4 h-4" />
                 <span>Add Expense</span>
               </Button>
@@ -85,7 +85,7 @@ const FinancePage = () => {
 
           <Dialog open={addIncomeOpen} onOpenChange={setAddIncomeOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+              <Button variant="outline" className="action-button gap-2">
                 <Plus className="w-4 h-4" />
                 Add Income
               </Button>
@@ -125,7 +125,7 @@ const FinancePage = () => {
 
           <Dialog open={addGoalOpen} onOpenChange={setAddGoalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+              <Button variant="outline" className="action-button gap-2">
                 <Target className="w-4 h-4" />
                 Add Goal
               </Button>
@@ -152,11 +152,11 @@ const FinancePage = () => {
             </DialogContent>
           </Dialog>
 
-          <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+          <Button variant="outline" className="action-button gap-2">
             <FileText className="w-4 h-4" />
             Generate Report
           </Button>
-          <Button variant="outline" className="gap-2 shadow-sm hover:shadow-md transition-all">
+          <Button variant="outline" className="action-button gap-2">
             <Download className="w-4 h-4" />
             Export Data
           </Button>

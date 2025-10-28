@@ -140,21 +140,30 @@ All colors MUST be HSL.
     }
   }
   
-  /* Page layout utilities - tight, clean spacing */
+  /* Page layout utilities - clean, elegant spacing */
   .page-container {
-    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-0 pb-4;
+    @apply w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-6;
   }
   
   .page-header {
-    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-3;
+    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 mb-6;
   }
   
   .page-title {
-    @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-foreground;
+    @apply text-2xl sm:text-3xl font-semibold tracking-tight text-foreground leading-tight;
   }
   
   .page-subtitle {
-    @apply text-sm sm:text-base text-muted-foreground mt-1.5 leading-relaxed font-normal;
+    @apply text-sm text-muted-foreground mt-1 leading-relaxed font-normal max-w-2xl;
+  }
+  
+  /* Action button groups */
+  .page-actions {
+    @apply flex flex-wrap items-center gap-2.5;
+  }
+  
+  .action-button {
+    @apply shadow-sm hover:shadow-md transition-all duration-200 rounded-lg;
   }
   
   /* Workspace grid layouts with tight, consistent spacing */

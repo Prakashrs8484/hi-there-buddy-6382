@@ -72,10 +72,10 @@ const NeuraNotes = () => {
         {/* Header */}
         <div className="page-header">
           <div className="min-w-0 flex-1">
-            <h1 className="page-title mb-2">NeuraNotes</h1>
+            <h1 className="page-title">NeuraNotes</h1>
             <p className="page-subtitle">Your AI-powered personal journal and knowledge workspace</p>
           </div>
-          <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 shadow-sm">
+          <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
             <Calendar className="w-4 h-4 mr-1.5" />
             {notes.length} Notes
           </Badge>
@@ -141,10 +141,10 @@ const NeuraNotes = () => {
                   className="min-h-[200px] resize-none"
                 />
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Button onClick={handleSaveNote} disabled={!noteTitle.trim() || !noteContent.trim()} className="shadow-sm hover:shadow-md transition-all">
+                  <Button onClick={handleSaveNote} disabled={!noteTitle.trim() || !noteContent.trim()} className="action-button">
                     Save Note
                   </Button>
-                  <Button variant="outline" onClick={() => { setNoteTitle(""); setNoteContent(""); }} className="shadow-sm hover:shadow-md transition-all">
+                  <Button variant="outline" onClick={() => { setNoteTitle(""); setNoteContent(""); }} className="action-button">
                     Clear
                   </Button>
                 </div>

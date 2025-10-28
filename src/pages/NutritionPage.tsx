@@ -49,15 +49,15 @@ const NutritionPage = () => {
         {/* Header */}
         <div className="page-header">
           <div className="min-w-0 flex-1">
-            <h1 className="page-title mb-2">
+            <h1 className="page-title">
               Nutrition & Diet Workspace
             </h1>
             <p className="page-subtitle">Your personal nutrition lab powered by AI</p>
           </div>
-          <div className="flex gap-3">
+          <div className="page-actions">
           <Dialog open={mealDialogOpen} onOpenChange={setMealDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="shadow-sm hover:shadow-md transition-all">
+              <Button className="action-button">
                 <Plus className="w-4 h-4 mr-2" />
                 Log Meal
               </Button>
@@ -107,11 +107,11 @@ const NutritionPage = () => {
                 </div>
               </DialogContent>
           </Dialog>
-          <Button variant="outline" onClick={handleLogWater} className="shadow-sm hover:shadow-md transition-all">
+          <Button variant="outline" onClick={handleLogWater} className="action-button">
             <Droplet className="w-4 h-4 mr-2" />
             Log Water
           </Button>
-          <Button variant="outline" className="shadow-sm hover:shadow-md transition-all">
+          <Button variant="outline" className="action-button">
             <Download className="w-4 h-4 mr-2" />
             Export Report
           </Button>
