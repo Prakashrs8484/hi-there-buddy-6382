@@ -168,28 +168,15 @@ All colors MUST be HSL.
   
   /* Workspace grid layouts with tight, consistent spacing */
   .workspace-grid {
-    @apply grid grid-cols-1 xl:grid-cols-12 gap-4 mt-3;
+    @apply grid grid-cols-1 xl:grid-cols-3 gap-4 mt-3;
   }
   
   .workspace-chat-column {
-    @apply xl:col-span-4 min-w-0;
+    @apply xl:col-span-1 min-w-0;
   }
   
   .workspace-content-column {
-    @apply xl:col-span-8 space-y-4 min-w-0;
-  }
-
-  /* Compact chat layout for Finance and Career pages */
-  .workspace-compact-grid {
-    @apply grid grid-cols-1 lg:grid-cols-[350px_1fr] gap-4 mt-3;
-  }
-
-  .workspace-compact-chat {
-    @apply min-w-0 space-y-4;
-  }
-
-  .workspace-compact-content {
-    @apply min-w-0 space-y-4;
+    @apply xl:col-span-2 space-y-4 min-w-0;
   }
   
   /* Elegant card styles with soft shadows */
