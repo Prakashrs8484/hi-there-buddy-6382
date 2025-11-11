@@ -1,7 +1,7 @@
 import { IndianRupee, TrendingUp, Target, PiggyBank, Plus, FileText, Download } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
 import AgentChat from "@/components/AgentChat";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -16,6 +16,9 @@ import { FinancialGoals } from "@/components/finance/FinancialGoals";
 import { ExpenseForecast } from "@/components/finance/ExpenseForecast";
 import { TransactionsList } from "@/components/finance/TransactionsList";
 import { IncomeTracker } from "@/components/finance/IncomeTracker";
+import { MonthlySummary } from "@/components/finance/MonthlySummary";
+import { SpendingPatternChart } from "@/components/finance/SpendingPatternChart";
+import { SmartSuggestions } from "@/components/finance/SmartSuggestions";
 
 const FinancePage = () => {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
@@ -162,29 +165,45 @@ const FinancePage = () => {
           </Button>
         </div>
 
-        {/* Two Column Layout */}
-        <div className="workspace-grid">
-          {/* Left Column - Agent Chat */}
-          <div className="workspace-chat-column">
-            <div className="h-[600px] sm:h-[750px] lg:h-[800px]">
-              <AgentChat
-                agentName="Finance Agent"
-                agentIcon={IndianRupee}
-                placeholder="Ask about budgets, expenses, savings, investments..."
-                initialMessages={[
-                  {
-                    role: "agent",
-                    content: "Hello! I'm your Finance Agent. I can help you track expenses, create budgets, analyze spending patterns, set financial goals, and provide investment insights. What would you like to explore today?",
-                    timestamp: new Date(Date.now() - 60000),
-                  },
-                ]}
-              />
-            </div>
+        {/* Two Column Layout with Compact Chat */}
+        <div className="workspace-compact-grid">
+          {/* Left Column - Compact Chat & Quick Actions */}
+          <div className="workspace-compact-chat">
+            <Card className="card-elegant border-primary/20 h-[700px] flex flex-col">
+              <CardHeader className="flex-shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <IndianRupee className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Finance Agent</h3>
+                    <p className="text-xs text-muted-foreground">Your financial advisor</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <div className="flex-1 min-h-0">
+                <AgentChat
+                  agentName="Finance Agent"
+                  agentIcon={IndianRupee}
+                  placeholder="Ask about budgets, expenses, savings..."
+                  initialMessages={[
+                    {
+                      role: "agent",
+                      content: "Hello! I can help you track expenses, create budgets, analyze spending patterns, and achieve your financial goals. What would you like to explore today?",
+                      timestamp: new Date(Date.now() - 60000),
+                    },
+                  ]}
+                />
+              </div>
+            </Card>
+
+            {/* AI Smart Suggestions */}
+            <SmartSuggestions />
           </div>
 
-          {/* Right Column - Dashboard Modules */}
-          <div className="workspace-content-column">
-            {/* Overview Summary */}
+          {/* Right Column - Rich Dashboard Content */}
+          <div className="workspace-compact-content">
+            {/* Overview Summary Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {financialStats.map((stat, idx) => (
                 <Card key={idx} className="card-hover card-glass p-4">
@@ -200,6 +219,12 @@ const FinancePage = () => {
                   </p>
                 </Card>
               ))}
+            </div>
+
+            {/* Two-column grid for key sections */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <MonthlySummary />
+              <SpendingPatternChart />
             </div>
 
             {/* AI Expense Forecast */}
@@ -221,11 +246,11 @@ const FinancePage = () => {
               </TabsContent>
             </Tabs>
 
-            {/* Budget Planner */}
-            <BudgetPlanner />
-
-            {/* Savings Goals Progress */}
-            <FinancialGoals />
+            {/* Two-column grid for goals and budget */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <FinancialGoals />
+              <BudgetPlanner />
+            </div>
 
             {/* Transactions List */}
             <TransactionsList />
