@@ -163,25 +163,27 @@ const FinancePage = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="workspace-flex-layout">
+        <div className="workspace-grid">
           {/* Left Column - Agent Chat */}
-          <div className="workspace-flex-chat">
-            <AgentChat
-              agentName="Finance Agent"
-              agentIcon={IndianRupee}
-              placeholder="Ask about budgets, expenses, savings, investments..."
-              initialMessages={[
-                {
-                  role: "agent",
-                  content: "Hello! I'm your Finance Agent. I can help you track expenses, create budgets, analyze spending patterns, set financial goals, and provide investment insights. What would you like to explore today?",
-                  timestamp: new Date(Date.now() - 60000),
-                },
-              ]}
-            />
+          <div className="workspace-chat-column">
+            <div className="h-[600px] sm:h-[750px] lg:h-[800px]">
+              <AgentChat
+                agentName="Finance Agent"
+                agentIcon={IndianRupee}
+                placeholder="Ask about budgets, expenses, savings, investments..."
+                initialMessages={[
+                  {
+                    role: "agent",
+                    content: "Hello! I'm your Finance Agent. I can help you track expenses, create budgets, analyze spending patterns, set financial goals, and provide investment insights. What would you like to explore today?",
+                    timestamp: new Date(Date.now() - 60000),
+                  },
+                ]}
+              />
+            </div>
           </div>
 
           {/* Right Column - Dashboard Modules */}
-          <div className="workspace-flex-content">
+          <div className="workspace-content-column">
             {/* Overview Summary */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {financialStats.map((stat, idx) => (

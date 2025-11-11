@@ -50,25 +50,27 @@ const CareerPage = () => {
         <CareerDashboard />
 
         {/* Two Column Layout */}
-        <div className="workspace-flex-layout">
+        <div className="workspace-grid">
           {/* Left Column - Agent Chat */}
-          <div className="workspace-flex-chat">
-            <AgentChat
-              agentName="Career Coach"
-              agentIcon={Target}
-              placeholder="Ask about goals, skills, resume, jobs, learning paths..."
-              initialMessages={[
-                {
-                  role: "agent",
-                  content: "Hello! I'm your Career Coach. I can help you set goals, track skills, optimize your resume, plan learning paths, and find job opportunities. What would you like to work on today?",
-                  timestamp: new Date(Date.now() - 60000),
-                },
-              ]}
-            />
+          <div className="workspace-chat-column">
+            <div className="h-[600px] sm:h-[750px] lg:h-[800px]">
+              <AgentChat
+                agentName="Career Coach"
+                agentIcon={Target}
+                placeholder="Ask about goals, skills, resume, jobs, learning paths..."
+                initialMessages={[
+                  {
+                    role: "agent",
+                    content: "Hello! I'm your Career Coach. I can help you set goals, track skills, optimize your resume, plan learning paths, and find job opportunities. What would you like to work on today?",
+                    timestamp: new Date(Date.now() - 60000),
+                  },
+                ]}
+              />
+            </div>
           </div>
 
           {/* Right Column - Career Modules */}
-          <div className="workspace-flex-content">
+          <div className="workspace-content-column">
             {/* Career Goals Planner */}
             <CareerGoalsPlanner />
 
