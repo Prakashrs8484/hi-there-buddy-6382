@@ -10,6 +10,11 @@ import { SkillMatrix } from "@/components/career/SkillMatrix";
 import { ResumeOptimizer } from "@/components/career/ResumeOptimizer";
 import { JobTracker } from "@/components/career/JobTracker";
 import { LearningPathways } from "@/components/career/LearningPathways";
+import { SkillProgressTracker } from "@/components/career/SkillProgressTracker";
+import { UpcomingInterviews } from "@/components/career/UpcomingInterviews";
+import { CareerMilestones } from "@/components/career/CareerMilestones";
+import { AICareerInsights } from "@/components/career/AICareerInsights";
+import { Card, CardHeader } from "@/components/ui/card";
 
 const CareerPage = () => {
   const { toast } = useToast();
@@ -49,37 +54,64 @@ const CareerPage = () => {
         {/* Career Overview Dashboard */}
         <CareerDashboard />
 
-        {/* Two Column Layout */}
-        <div className="workspace-flex-layout">
-          {/* Left Column - Agent Chat */}
-          <div className="workspace-flex-chat">
-            <AgentChat
-              agentName="Career Coach"
-              agentIcon={Target}
-              placeholder="Ask about goals, skills, resume, jobs, learning paths..."
-              initialMessages={[
-                {
-                  role: "agent",
-                  content: "Hello! I'm your Career Coach. I can help you set goals, track skills, optimize your resume, plan learning paths, and find job opportunities. What would you like to work on today?",
-                  timestamp: new Date(Date.now() - 60000),
-                },
-              ]}
-            />
+        {/* Two Column Layout with Compact Chat */}
+        <div className="workspace-compact-grid">
+          {/* Left Column - Compact Chat & Insights */}
+          <div className="workspace-compact-chat">
+            <Card className="card-elegant border-primary/20 h-[700px] flex flex-col">
+              <CardHeader className="flex-shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <Target className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Career Coach</h3>
+                    <p className="text-xs text-muted-foreground">Your career mentor</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <div className="flex-1 min-h-0">
+                <AgentChat
+                  agentName="Career Coach"
+                  agentIcon={Target}
+                  placeholder="Ask about goals, skills, resume..."
+                  initialMessages={[
+                    {
+                      role: "agent",
+                      content: "Hello! I can help you set goals, track skills, optimize your resume, and find opportunities. What would you like to work on today?",
+                      timestamp: new Date(Date.now() - 60000),
+                    },
+                  ]}
+                />
+              </div>
+            </Card>
+
+            {/* AI Career Insights */}
+            <AICareerInsights />
           </div>
 
-          {/* Right Column - Career Modules */}
-          <div className="workspace-flex-content">
+          {/* Right Column - Rich Career Content */}
+          <div className="workspace-compact-content">
             {/* Career Goals Planner */}
             <CareerGoalsPlanner />
 
-            {/* Skill Matrix */}
-            <SkillMatrix />
+            {/* Two-column grid for skill tracking */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <SkillProgressTracker />
+              <SkillMatrix />
+            </div>
 
-            {/* Resume Optimizer */}
-            <ResumeOptimizer />
+            {/* Interviews & Applications */}
+            <UpcomingInterviews />
 
-            {/* Job Application Tracker */}
-            <JobTracker />
+            {/* Career Milestones Timeline */}
+            <CareerMilestones />
+
+            {/* Two-column grid for resume and jobs */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <ResumeOptimizer />
+              <JobTracker />
+            </div>
 
             {/* Learning Pathways */}
             <LearningPathways />
