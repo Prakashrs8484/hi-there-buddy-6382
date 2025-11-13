@@ -16,11 +16,17 @@ import { FinancialGoals } from "@/components/finance/FinancialGoals";
 import { ExpenseForecast } from "@/components/finance/ExpenseForecast";
 import { TransactionsList } from "@/components/finance/TransactionsList";
 import { IncomeTracker } from "@/components/finance/IncomeTracker";
+import { ExpenseDistribution } from "@/components/finance/ExpenseDistribution";
+import { CategoryBreakdown } from "@/components/finance/CategoryBreakdown";
+import { CategoryInsights } from "@/components/finance/CategoryInsights";
+import { ExpenseSummaryBar } from "@/components/finance/ExpenseSummaryBar";
+import { AIFinanceInsights } from "@/components/finance/AIFinanceInsights";
 
 const FinancePage = () => {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
   const [addIncomeOpen, setAddIncomeOpen] = useState(false);
   const [addGoalOpen, setAddGoalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   return (
     <DashboardLayout hideNavigation>
@@ -201,6 +207,32 @@ const FinancePage = () => {
                 </Card>
               ))}
             </div>
+
+            {/* Expense Summary Bar with Month Selector */}
+            <ExpenseSummaryBar />
+
+            {/* AI Expense Distribution & Category Analysis */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <ExpenseDistribution 
+                onCategoryClick={setSelectedCategory}
+                activeCategory={selectedCategory || undefined}
+              />
+              <CategoryBreakdown 
+                onCategoryClick={setSelectedCategory}
+                activeCategory={selectedCategory || undefined}
+              />
+            </div>
+
+            {/* Category Insights Drill-Down */}
+            {selectedCategory && (
+              <CategoryInsights 
+                category={selectedCategory} 
+                onClose={() => setSelectedCategory(null)} 
+              />
+            )}
+
+            {/* AI Financial Insights */}
+            <AIFinanceInsights />
 
             {/* AI Expense Forecast */}
             <ExpenseForecast />
