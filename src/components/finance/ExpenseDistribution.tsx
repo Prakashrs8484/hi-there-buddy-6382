@@ -41,74 +41,84 @@ const renderActiveShape = (props: any) => {
 };
 
 const renderCustomLabel = (props: any) => {
-  const { cx, cy, midAngle, outerRadius, fill, payload, percent } = props;
+  const { cx, cy, midAngle, outerRadius, fill, payload, percent, index } = props;
   const RADIAN = Math.PI / 180;
-  const radius = outerRadius + 50;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
   
-  // Line coordinates
-  const lineX1 = cx + (outerRadius + 5) * Math.cos(-midAngle * RADIAN);
-  const lineY1 = cy + (outerRadius + 5) * Math.sin(-midAngle * RADIAN);
-  const lineX2 = cx + (outerRadius + 25) * Math.cos(-midAngle * RADIAN);
-  const lineY2 = cy + (outerRadius + 25) * Math.sin(-midAngle * RADIAN);
+  // Calculate positions for better label distribution
+  const labelRadius = outerRadius + 60;
+  const x = cx + labelRadius * Math.cos(-midAngle * RADIAN);
+  const y = cy + labelRadius * Math.sin(-midAngle * RADIAN);
+  
+  // Line coordinates - from edge of slice to label
+  const lineStartX = cx + (outerRadius + 2) * Math.cos(-midAngle * RADIAN);
+  const lineStartY = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN);
+  const lineMidX = cx + (outerRadius + 30) * Math.cos(-midAngle * RADIAN);
+  const lineMidY = cy + (outerRadius + 30) * Math.sin(-midAngle * RADIAN);
   
   const Icon = payload.icon;
-  const textAnchor = x > cx ? 'start' : 'end';
+  const isRightSide = x > cx;
   
   return (
-    <g>
-      {/* Connector line */}
-      <path
-        d={`M ${lineX1},${lineY1} L ${lineX2},${lineY2} L ${x > cx ? x - 5 : x + 5},${y}`}
-        stroke={fill}
-        strokeWidth={2}
-        fill="none"
-        opacity={0.8}
-      />
-      {/* Label background */}
-      <rect
-        x={x > cx ? x : x - 90}
-        y={y - 18}
-        width={90}
-        height={36}
-        fill="hsl(var(--background))"
+    <g className="label-group">
+      {/* Connector line - two segments for clean look */}
+      <line
+        x1={lineStartX}
+        y1={lineStartY}
+        x2={lineMidX}
+        y2={lineMidY}
         stroke={fill}
         strokeWidth={1.5}
-        rx={8}
-        opacity={0.95}
-        style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))" }}
+        opacity={1}
       />
-      {/* Icon */}
+      <line
+        x1={lineMidX}
+        y1={lineMidY}
+        x2={isRightSide ? x - 5 : x + 5}
+        y2={y}
+        stroke={fill}
+        strokeWidth={1.5}
+        opacity={1}
+      />
+      
+      {/* Icon with background circle */}
+      <circle
+        cx={isRightSide ? x + 12 : x - 12}
+        cy={y}
+        r={12}
+        fill={fill}
+        opacity={0.15}
+      />
       <foreignObject
-        x={x > cx ? x + 6 : x - 84}
-        y={y - 12}
-        width={20}
-        height={20}
+        x={isRightSide ? x + 4 : x - 20}
+        y={y - 8}
+        width={16}
+        height={16}
       >
         <div className="flex items-center justify-center h-full">
-          <Icon className="w-4 h-4" style={{ color: fill }} />
+          <Icon className="w-3.5 h-3.5" style={{ color: fill }} />
         </div>
       </foreignObject>
+      
       {/* Category name */}
       <text
-        x={x > cx ? x + 30 : x - 60}
-        y={y - 3}
-        textAnchor="middle"
+        x={isRightSide ? x + 28 : x - 28}
+        y={y - 2}
+        textAnchor={isRightSide ? 'start' : 'end'}
         fill="hsl(var(--foreground))"
-        fontSize={11}
+        fontSize={12}
         fontWeight={600}
       >
         {payload.name}
       </text>
+      
       {/* Percentage */}
       <text
-        x={x > cx ? x + 30 : x - 60}
-        y={y + 10}
-        textAnchor="middle"
-        fill="hsl(var(--muted-foreground))"
-        fontSize={10}
-        fontWeight={500}
+        x={isRightSide ? x + 28 : x - 28}
+        y={y + 11}
+        textAnchor={isRightSide ? 'start' : 'end'}
+        fill={fill}
+        fontSize={11}
+        fontWeight={700}
       >
         {(percent * 100).toFixed(1)}%
       </text>
@@ -144,15 +154,15 @@ export const ExpenseDistribution = ({ onCategoryClick, activeCategory }: Expense
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[450px] w-full">
+        <div className="h-[480px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
+            <PieChart margin={{ top: 20, right: 100, bottom: 20, left: 100 }}>
               <Pie
                 data={EXPENSE_DATA}
                 cx="50%"
                 cy="50%"
-                outerRadius={90}
-                paddingAngle={3}
+                outerRadius={85}
+                paddingAngle={2}
                 dataKey="value"
                 onMouseEnter={onPieEnter}
                 onMouseLeave={onPieLeave}
@@ -162,15 +172,17 @@ export const ExpenseDistribution = ({ onCategoryClick, activeCategory }: Expense
                 className="cursor-pointer"
                 label={renderCustomLabel}
                 labelLine={false}
+                isAnimationActive={true}
+                animationDuration={800}
+                animationBegin={0}
               >
                 {EXPENSE_DATA.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
                     fill={entry.color}
-                    className="transition-all duration-300"
+                    className="transition-all duration-200"
                     style={{ 
-                      opacity: activeIndex === null || activeIndex === index ? 1 : 0.6,
-                      transition: "all 0.3s ease"
+                      opacity: activeIndex === null || activeIndex === index ? 1 : 0.7
                     }}
                   />
                 ))}
