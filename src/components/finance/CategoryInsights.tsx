@@ -49,9 +49,11 @@ const RECENT_TRANSACTIONS: Record<string, Array<{ date: string; description: str
 interface CategoryInsightsProps {
   category: string;
   onClose: () => void;
+  mode?: "expense" | "income";
 }
 
-export const CategoryInsights = ({ category, onClose }: CategoryInsightsProps) => {
+export const CategoryInsights = ({ category, onClose, mode = "expense" }: CategoryInsightsProps) => {
+  const isIncomeMode = mode === "income";
   const trendData = CATEGORY_TREND_DATA[category as keyof typeof CATEGORY_TREND_DATA] || CATEGORY_TREND_DATA.Health;
   const transactions = RECENT_TRANSACTIONS[category] || RECENT_TRANSACTIONS.Health;
   
@@ -125,7 +127,9 @@ export const CategoryInsights = ({ category, onClose }: CategoryInsightsProps) =
 
         {/* Recent Transactions */}
         <div>
-          <h3 className="text-sm font-semibold text-muted-foreground mb-3">Recent Transactions</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground mb-3">
+            {isIncomeMode ? "Recent Income" : "Recent Transactions"}
+          </h3>
           <div className="space-y-2">
             {transactions.map((txn, idx) => (
               <div 

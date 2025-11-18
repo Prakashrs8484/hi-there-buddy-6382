@@ -9,7 +9,7 @@ interface InsightItem {
   bgColor: string;
 }
 
-const INSIGHTS: InsightItem[] = [
+const EXPENSE_INSIGHTS: InsightItem[] = [
   {
     type: "warning",
     message: "Your health expenses rose by 20% this month.",
@@ -40,15 +40,55 @@ const INSIGHTS: InsightItem[] = [
   },
 ];
 
-export const AIFinanceInsights = () => {
+const INCOME_INSIGHTS: InsightItem[] = [
+  {
+    type: "success",
+    message: "Your freelance income increased by 15% this month — great work!",
+    icon: CheckCircle,
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
+  {
+    type: "info",
+    message: "Investment returns are up 8% compared to last quarter.",
+    icon: TrendingUp,
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    type: "tip",
+    message: "Consider diversifying income sources to reach your financial goals faster.",
+    icon: Lightbulb,
+    color: "text-accent",
+    bgColor: "bg-accent/10",
+  },
+  {
+    type: "warning",
+    message: "Classes income dropped by ₹2,000. Consider adding more sessions.",
+    icon: AlertCircle,
+    color: "text-destructive",
+    bgColor: "bg-destructive/10",
+  },
+];
+
+interface AIFinanceInsightsProps {
+  mode?: "expense" | "income";
+}
+
+export const AIFinanceInsights = ({ mode = "expense" }: AIFinanceInsightsProps) => {
+  const isIncomeMode = mode === "income";
+  const insights = isIncomeMode ? INCOME_INSIGHTS : EXPENSE_INSIGHTS;
+  
   return (
     <Card className="card-hover card-glass w-full overflow-hidden">
       <CardHeader className="p-3 sm:p-6">
-        <CardTitle className="text-base sm:text-lg font-semibold">AI Financial Insights</CardTitle>
+        <CardTitle className="text-base sm:text-lg font-semibold">
+          {isIncomeMode ? "AI Income Insights" : "AI Financial Insights"}
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-3 sm:p-6">
         <div className="grid grid-cols-1 gap-2 sm:gap-3">
-          {INSIGHTS.map((insight, idx) => (
+          {insights.map((insight, idx) => (
             <Card 
               key={idx} 
               className="card-hover p-4 border border-border transition-all duration-200 hover:shadow-md animate-fade-in"

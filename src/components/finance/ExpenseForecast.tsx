@@ -28,16 +28,26 @@ const insights = [
   },
 ];
 
-export const ExpenseForecast = () => {
+interface ExpenseForecastProps {
+  mode?: "expense" | "income";
+}
+
+export const ExpenseForecast = ({ mode = "expense" }: ExpenseForecastProps) => {
+  const isIncomeMode = mode === "income";
+  
   return (
     <Card className="card-hover card-glass w-full overflow-hidden">
       <CardHeader className="p-3 sm:p-6">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
-          <CardTitle className="text-base sm:text-lg md:text-xl truncate">AI Expense Forecast</CardTitle>
+          <CardTitle className="text-base sm:text-lg md:text-xl truncate">
+            {isIncomeMode ? "AI Income Projection" : "AI Expense Forecast"}
+          </CardTitle>
         </div>
         <p className="text-xs sm:text-sm text-muted-foreground">
-          Predicted spending based on your patterns and upcoming events
+          {isIncomeMode 
+            ? "Projected income based on your patterns and opportunities" 
+            : "Predicted spending based on your patterns and upcoming events"}
         </p>
       </CardHeader>
       <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-6">
