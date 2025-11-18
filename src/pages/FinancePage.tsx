@@ -10,10 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { ExpenseTracker } from "@/components/finance/ExpenseTracker";
 import { FinancialGoals } from "@/components/finance/FinancialGoals";
 import { TransactionsList } from "@/components/finance/TransactionsList";
-import { IncomeTracker } from "@/components/finance/IncomeTracker";
 import { ExpenseSummaryBar } from "@/components/finance/ExpenseSummaryBar.tsx";
 import { AnalyticsDashboard } from "@/components/finance/AnalyticsDashboard";
 import { BudgetPlanner } from "@/components/finance/BudgetPlanner";
@@ -193,22 +191,6 @@ const FinancePage = () => {
 
             {/* Financial Goals */}
             <FinancialGoals />
-
-            {/* Expense & Income Tracking */}
-            <Tabs defaultValue="expenses" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="expenses">Expense Tracker</TabsTrigger>
-                <TabsTrigger value="income">Income Tracker</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="expenses" className="space-y-4">
-                <ExpenseTracker />
-              </TabsContent>
-
-              <TabsContent value="income" className="space-y-4">
-                <IncomeTracker />
-              </TabsContent>
-            </Tabs>
           </div>
 
           {/* Right Column - Analytics & Insights */}
