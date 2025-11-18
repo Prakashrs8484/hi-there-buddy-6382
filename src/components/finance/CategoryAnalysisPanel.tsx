@@ -10,10 +10,13 @@ import { useState } from "react";
 interface CategoryAnalysisPanelProps {
   category: string;
   onBack: () => void;
+  mode?: "expense" | "income";
 }
 
-export const CategoryAnalysisPanel = ({ category, onBack }: CategoryAnalysisPanelProps) => {
+export const CategoryAnalysisPanel = ({ category, onBack, mode = "expense" }: CategoryAnalysisPanelProps) => {
   const [activeTab, setActiveTab] = useState("analytics");
+  
+  const isIncomeMode = mode === "income";
 
   return (
     <Card className="card-glass border-0 shadow-lg w-full overflow-hidden">
@@ -31,7 +34,7 @@ export const CategoryAnalysisPanel = ({ category, onBack }: CategoryAnalysisPane
           <div className="min-w-0 flex-1">
             <h2 className="text-base sm:text-xl font-semibold truncate">{category} Insights</h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 truncate">
-              Detailed analytics and forecasts
+              {isIncomeMode ? "Detailed income analytics and projections" : "Detailed analytics and forecasts"}
             </p>
           </div>
         </div>
@@ -68,13 +71,13 @@ export const CategoryAnalysisPanel = ({ category, onBack }: CategoryAnalysisPane
       <CardContent className="p-3 sm:p-6 w-full overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsContent value="analytics" className="mt-0 w-full">
-            <CategoryInsights category={category} onClose={onBack} />
+            <CategoryInsights category={category} onClose={onBack} mode={mode} />
           </TabsContent>
           <TabsContent value="forecast" className="mt-0 w-full">
-            <ExpenseForecast />
+            <ExpenseForecast mode={mode} />
           </TabsContent>
           <TabsContent value="ai-insights" className="mt-0 w-full">
-            <AIFinanceInsights />
+            <AIFinanceInsights mode={mode} />
           </TabsContent>
         </Tabs>
       </CardContent>

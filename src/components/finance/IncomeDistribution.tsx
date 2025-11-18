@@ -53,19 +53,23 @@ const renderCustomLabel = (props: any, hoveredCategory: string | null, setHovere
   const isHovered = hoveredCategory === payload.name;
   const RADIAN = Math.PI / 180;
   
+  // Tighter label positioning for compact layout
   const labelRadius = isMobile ? outerRadius + 25 : outerRadius + 45;
   const x = cx + labelRadius * Math.cos(-midAngle * RADIAN);
   const y = cy + labelRadius * Math.sin(-midAngle * RADIAN);
   
+  // Shorter connector line starting point
   const lineStartX = cx + (outerRadius + 2) * Math.cos(-midAngle * RADIAN);
   const lineStartY = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN);
   
+  // Simplified control points for smoother, tighter curves
   const cp1Offset = isMobile ? 8 : 15;
   const bendOffset = isMobile ? 20 : 35;
   
   const controlPointX = cx + (outerRadius + cp1Offset) * Math.cos(-midAngle * RADIAN);
   const controlPointY = cy + (outerRadius + cp1Offset) * Math.sin(-midAngle * RADIAN);
   
+  // End point before short horizontal line
   const bendPointX = cx + (outerRadius + bendOffset) * Math.cos(-midAngle * RADIAN);
   const bendPointY = cy + (outerRadius + bendOffset) * Math.sin(-midAngle * RADIAN);
   

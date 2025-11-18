@@ -35,6 +35,7 @@ export const AnalyticsDashboard = ({ selectedCategory, onCategorySelect }: Analy
       <CategoryAnalysisPanel 
         category={selectedCategory} 
         onBack={handleCloseInsights}
+        mode={viewMode}
       />
     );
   }
