@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PieChart as PieChartIcon, BarChart3, Donut, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -49,32 +49,34 @@ const INCOME_DATA_BY_PERIOD: Record<TimePeriod, CategoryData[]> = {
 };
 
 const renderCustomLabel = (props: any, hoveredCategory: string | null, setHoveredCategory: (cat: string | null) => void, isMobile: boolean = false) => {
-  const { cx, cy, midAngle, outerRadius, fill, payload, percent } = props;
+  const { cx, cy, midAngle, outerRadius, fill, payload, percent, index } = props;
   const isHovered = hoveredCategory === payload.name;
   const RADIAN = Math.PI / 180;
   
-  // Tighter label positioning for compact layout
-  const labelRadius = isMobile ? outerRadius + 25 : outerRadius + 45;
+  // Dynamic label positioning based on screen size and slice position
+  const baseRadius = isMobile ? outerRadius + 30 : outerRadius + 50;
+  
+  // Adjust label distance for better spacing on mobile
+  const labelRadius = baseRadius + (isMobile ? index * 2 : 0);
   const x = cx + labelRadius * Math.cos(-midAngle * RADIAN);
   const y = cy + labelRadius * Math.sin(-midAngle * RADIAN);
   
-  // Shorter connector line starting point
+  // Connector line starting point
   const lineStartX = cx + (outerRadius + 2) * Math.cos(-midAngle * RADIAN);
   const lineStartY = cy + (outerRadius + 2) * Math.sin(-midAngle * RADIAN);
   
-  // Simplified control points for smoother, tighter curves
-  const cp1Offset = isMobile ? 8 : 15;
-  const bendOffset = isMobile ? 20 : 35;
+  // Control points for smooth curves
+  const cp1Offset = isMobile ? 10 : 18;
+  const bendOffset = isMobile ? 22 : 40;
   
   const controlPointX = cx + (outerRadius + cp1Offset) * Math.cos(-midAngle * RADIAN);
   const controlPointY = cy + (outerRadius + cp1Offset) * Math.sin(-midAngle * RADIAN);
   
-  // End point before short horizontal line
   const bendPointX = cx + (outerRadius + bendOffset) * Math.cos(-midAngle * RADIAN);
   const bendPointY = cy + (outerRadius + bendOffset) * Math.sin(-midAngle * RADIAN);
   
   const isRightSide = x > cx;
-  const horizontalEndX = isRightSide ? bendPointX + (isMobile ? 6 : 12) : bendPointX - (isMobile ? 6 : 12);
+  const horizontalEndX = isRightSide ? bendPointX + (isMobile ? 8 : 15) : bendPointX - (isMobile ? 8 : 15);
   
   const pathData = `
     M ${lineStartX},${lineStartY}
@@ -93,7 +95,7 @@ const renderCustomLabel = (props: any, hoveredCategory: string | null, setHovere
         stroke={fill}
         strokeWidth={isHovered ? 2.5 : 2}
         fill="none"
-        opacity={isHovered ? 1 : 0.9}
+        opacity={isHovered ? 1 : 0.85}
         style={{
           transition: 'all 0.3s ease',
           filter: isHovered ? `drop-shadow(0 0 4px ${fill})` : 'none'
@@ -102,11 +104,11 @@ const renderCustomLabel = (props: any, hoveredCategory: string | null, setHovere
       
       <g transform={`translate(${x}, ${y})`}>
         <rect
-          x={isRightSide ? (isMobile ? 2 : 6) : -(isMobile ? 70 : 90)}
-          y={isMobile ? -14 : -18}
-          width={isMobile ? 68 : 84}
-          height={isMobile ? 28 : 36}
-          fill={isHovered ? fill : 'white'}
+          x={isRightSide ? (isMobile ? 3 : 8) : -(isMobile ? 78 : 98)}
+          y={isMobile ? -16 : -20}
+          width={isMobile ? 75 : 90}
+          height={isMobile ? 32 : 40}
+          fill={isHovered ? fill : 'hsl(var(--card))'}
           stroke={fill}
           strokeWidth={isHovered ? 2 : 1.5}
           rx={isMobile ? 6 : 8}
@@ -118,9 +120,9 @@ const renderCustomLabel = (props: any, hoveredCategory: string | null, setHovere
         />
         
         <text
-          x={isRightSide ? (isMobile ? 10 : 14) : -(isMobile ? 62 : 82)}
-          y={isMobile ? -3 : -4}
-          textAnchor={isRightSide ? 'start' : 'start'}
+          x={isRightSide ? (isMobile ? 12 : 16) : -(isMobile ? 68 : 88)}
+          y={isMobile ? -4 : -5}
+          textAnchor="start"
           fill={isHovered ? 'white' : fill}
           className="font-semibold"
           style={{
@@ -132,10 +134,10 @@ const renderCustomLabel = (props: any, hoveredCategory: string | null, setHovere
         </text>
         
         <text
-          x={isRightSide ? (isMobile ? 10 : 14) : -(isMobile ? 62 : 82)}
-          y={isMobile ? 9 : 11}
-          textAnchor={isRightSide ? 'start' : 'start'}
-          fill={isHovered ? 'white' : '#666'}
+          x={isRightSide ? (isMobile ? 12 : 16) : -(isMobile ? 68 : 88)}
+          y={isMobile ? 10 : 12}
+          textAnchor="start"
+          fill={isHovered ? 'white' : 'hsl(var(--muted-foreground))'}
           className="font-bold"
           style={{
             fontSize: isMobile ? '10px' : '12px',
@@ -159,7 +161,19 @@ export const IncomeDistribution = ({ onCategoryClick, activeCategory }: IncomeDi
   const [chartType, setChartType] = useState<ChartType>('pie');
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('monthly');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+  
+  // Update isMobile on resize for better responsiveness
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const handleCategoryClick = (category: string) => {
     onCategoryClick?.(category);
@@ -277,13 +291,13 @@ export const IncomeDistribution = ({ onCategoryClick, activeCategory }: IncomeDi
             }`}
           >
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={isMobile ? { top: 10, right: 50, bottom: 10, left: 50 } : { top: 20, right: 100, bottom: 20, left: 100 }}>
+              <PieChart margin={isMobile ? { top: 20, right: 60, bottom: 20, left: 60 } : { top: 30, right: 110, bottom: 30, left: 110 }}>
                 <Pie
                   data={INCOME_DATA}
                   cx="50%"
                   cy="50%"
-                  outerRadius={isMobile ? 70 : 100}
-                  paddingAngle={1}
+                  outerRadius={isMobile ? 65 : 95}
+                  paddingAngle={2}
                   dataKey="value"
                   onClick={(data) => handleCategoryClick(data.name)}
                   className="cursor-pointer"
@@ -385,14 +399,14 @@ export const IncomeDistribution = ({ onCategoryClick, activeCategory }: IncomeDi
             }`}
           >
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart margin={isMobile ? { top: 10, right: 50, bottom: 10, left: 50 } : { top: 20, right: 100, bottom: 20, left: 100 }}>
+              <PieChart margin={isMobile ? { top: 20, right: 60, bottom: 20, left: 60 } : { top: 30, right: 110, bottom: 30, left: 110 }}>
                 <Pie
                   data={INCOME_DATA}
                   cx="50%"
                   cy="50%"
-                  innerRadius={isMobile ? 45 : 65}
-                  outerRadius={isMobile ? 70 : 100}
-                  paddingAngle={1}
+                  innerRadius={isMobile ? 40 : 60}
+                  outerRadius={isMobile ? 65 : 95}
+                  paddingAngle={2}
                   dataKey="value"
                   onClick={(data) => handleCategoryClick(data.name)}
                   className="cursor-pointer"
