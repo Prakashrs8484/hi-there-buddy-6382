@@ -1,10 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { useState } from "react";
-import { PieChart as PieChartIcon, Calendar } from "lucide-react";
+import { PieChart as PieChartIcon, BarChart3, Donut, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CategoryData {
   name: string;
@@ -15,6 +14,7 @@ interface CategoryData {
 }
 
 type TimePeriod = 'weekly' | 'monthly' | 'quarterly' | 'yearly';
+type ChartType = 'pie' | 'bar' | 'donut';
 
 // Sample data for different time periods
 const INCOME_DATA_BY_PERIOD: Record<TimePeriod, CategoryData[]> = {
@@ -155,119 +155,351 @@ interface IncomeDistributionProps {
 }
 
 export const IncomeDistribution = ({ onCategoryClick, activeCategory }: IncomeDistributionProps) => {
-  const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>('monthly');
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const isMobile = useIsMobile();
+  const [chartType, setChartType] = useState<ChartType>('pie');
+  const [timePeriod, setTimePeriod] = useState<TimePeriod>('monthly');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   
-  const data = INCOME_DATA_BY_PERIOD[selectedPeriod];
-  const totalIncome = data.reduce((sum, item) => sum + item.value, 0);
+  const handleCategoryClick = (category: string) => {
+    onCategoryClick?.(category);
+  };
 
-  const handlePieClick = (entry: any) => {
-    onCategoryClick?.(entry.name);
+  const handlePeriodChange = (newPeriod: TimePeriod) => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setTimePeriod(newPeriod);
+      setTimeout(() => setIsTransitioning(false), 50);
+    }, 300);
+  };
+
+  const INCOME_DATA = INCOME_DATA_BY_PERIOD[timePeriod];
+  const totalIncome = INCOME_DATA.reduce((sum, item) => sum + item.value, 0);
+
+  const chartTypes = [
+    { type: 'pie' as ChartType, icon: PieChartIcon, label: 'Pie Chart' },
+    { type: 'bar' as ChartType, icon: BarChart3, label: 'Bar Chart' },
+    { type: 'donut' as ChartType, icon: Donut, label: 'Donut Chart' },
+  ];
+
+  const periodLabels: Record<TimePeriod, string> = {
+    weekly: 'Week',
+    monthly: 'Month',
+    quarterly: 'Quarter',
+    yearly: 'Year',
   };
 
   return (
-    <Card className="card-glass border-0 shadow-lg w-full">
-      <CardHeader className="pb-3 sm:pb-4 space-y-2 sm:space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-          <div className="space-y-0.5 sm:space-y-1 min-w-0">
-            <CardTitle className="text-base sm:text-lg font-semibold flex items-center gap-2">
-              <PieChartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
-              <span className="truncate">Income Distribution</span>
+    <Card className="card-hover card-glass bg-gradient-to-br from-card to-card/50 w-full overflow-hidden">
+      <CardHeader className="p-3 sm:p-6">
+        <div className="flex flex-col gap-3 sm:gap-4 w-full">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 w-full">
+            <CardTitle className="text-sm sm:text-xl font-semibold flex flex-col sm:flex-row items-start sm:items-center justify-between flex-1 gap-1 sm:gap-0 w-full">
+              <span className="text-base sm:text-xl">Income Distribution</span>
+              <span className="text-xs sm:text-sm font-normal text-muted-foreground">
+                Total: ₹{totalIncome.toLocaleString()}
+              </span>
             </CardTitle>
-            <p className="text-xs sm:text-sm text-muted-foreground truncate">
-              Total: ₹{totalIncome.toLocaleString()}
-            </p>
+            
+            {/* Chart Type Switcher */}
+            <div className="flex items-center gap-0.5 sm:gap-1 sm:ml-4 p-0.5 sm:p-1 bg-muted/30 rounded-lg shrink-0">
+              {chartTypes.map(({ type, icon: Icon, label }) => (
+                <Button
+                  key={type}
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setChartType(type)}
+                  className={`h-7 w-7 sm:h-9 sm:w-9 p-0 transition-all duration-300 ${
+                    chartType === type
+                      ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground'
+                      : 'hover:bg-muted/50'
+                  }`}
+                  title={label}
+                >
+                  <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                </Button>
+              ))}
+            </div>
           </div>
-          
-          <Tabs 
-            value={selectedPeriod} 
-            onValueChange={(value) => setSelectedPeriod(value as TimePeriod)}
-            className="shrink-0"
-          >
-            <TabsList className="grid grid-cols-4 h-8 sm:h-9 bg-muted/40">
-              <TabsTrigger value="weekly" className="text-xs px-2 sm:px-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <Calendar className="w-3 h-3 sm:hidden" />
-                <span className="hidden sm:inline">Week</span>
+
+          {/* Time Period Selector */}
+          <Tabs value={timePeriod} onValueChange={(value) => handlePeriodChange(value as TimePeriod)} className="w-full">
+            <TabsList className="grid w-full grid-cols-4 bg-muted/30 h-auto">
+              <TabsTrigger 
+                value="weekly" 
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 text-xs sm:text-sm py-1.5 sm:py-2 px-1 sm:px-3"
+              >
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden xs:inline">Week</span>
+                <span className="xs:hidden">W</span>
               </TabsTrigger>
-              <TabsTrigger value="monthly" className="text-xs px-2 sm:px-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <span className="sm:hidden">Mon</span>
-                <span className="hidden sm:inline">Month</span>
+              <TabsTrigger 
+                value="monthly"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 text-xs sm:text-sm py-1.5 sm:py-2 px-1 sm:px-3"
+              >
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden xs:inline">Month</span>
+                <span className="xs:hidden">M</span>
               </TabsTrigger>
-              <TabsTrigger value="quarterly" className="text-xs px-2 sm:px-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <span className="sm:hidden">Qtr</span>
-                <span className="hidden sm:inline">Quarter</span>
+              <TabsTrigger 
+                value="quarterly"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 text-xs sm:text-sm py-1.5 sm:py-2 px-1 sm:px-3"
+              >
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden xs:inline">Quarter</span>
+                <span className="xs:hidden">Q</span>
               </TabsTrigger>
-              <TabsTrigger value="yearly" className="text-xs px-2 sm:px-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <span className="sm:hidden">Yr</span>
-                <span className="hidden sm:inline">Year</span>
+              <TabsTrigger 
+                value="yearly"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-300 text-xs sm:text-sm py-1.5 sm:py-2 px-1 sm:px-3"
+              >
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                <span className="hidden xs:inline">Year</span>
+                <span className="xs:hidden">Y</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
       </CardHeader>
 
-      <CardContent className="px-2 sm:px-6 pb-4 sm:pb-6">
-        <div className="w-full" style={{ height: isMobile ? '280px' : '340px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart margin={{ top: 40, right: 100, bottom: 40, left: 100 }}>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={(props) => renderCustomLabel(props, hoveredCategory, setHoveredCategory, isMobile)}
-                outerRadius={isMobile ? 70 : 90}
-                innerRadius={isMobile ? 42 : 54}
-                fill="#8884d8"
-                dataKey="value"
-                onClick={handlePieClick}
-                style={{ cursor: 'pointer' }}
+      <CardContent className="p-3 sm:p-6">
+        {/* Chart Container */}
+        <div 
+          className={`relative w-full transition-opacity duration-500 ${
+            isTransitioning ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ height: isMobile ? '280px' : '360px' }}
+        >
+          {/* Pie Chart View */}
+          <div 
+            className={`absolute inset-0 transition-all duration-500 ${
+              chartType === 'pie' ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+            }`}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart margin={isMobile ? { top: 10, right: 50, bottom: 10, left: 50 } : { top: 20, right: 100, bottom: 20, left: 100 }}>
+                <Pie
+                  data={INCOME_DATA}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={isMobile ? 70 : 100}
+                  paddingAngle={1}
+                  dataKey="value"
+                  onClick={(data) => handleCategoryClick(data.name)}
+                  className="cursor-pointer"
+                  label={(props) => renderCustomLabel(props, hoveredCategory, setHoveredCategory, isMobile)}
+                  labelLine={false}
+                  isAnimationActive={true}
+                  animationDuration={400}
+                  animationBegin={0}
+                  animationEasing="ease-out"
+                >
+                  {INCOME_DATA.map((entry, index) => {
+                    const isHovered = hoveredCategory === entry.name;
+                    return (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.color}
+                        stroke="hsl(var(--background))"
+                        strokeWidth={isHovered ? 3 : 2}
+                        opacity={hoveredCategory && !isHovered ? 0.4 : 1}
+                        className="transition-all duration-200"
+                        onMouseEnter={() => setHoveredCategory(entry.name)}
+                        onMouseLeave={() => setHoveredCategory(null)}
+                        style={{
+                          filter: isHovered ? `drop-shadow(0 0 8px ${entry.color}80)` : 'none',
+                          transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                          transformOrigin: 'center',
+                        }}
+                      />
+                    );
+                  })}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Bar Chart View */}
+          <div 
+            className={`absolute inset-0 transition-all duration-500 ${
+              chartType === 'bar' ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+            }`}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart 
+                data={INCOME_DATA}
+                margin={{ top: 20, right: 10, left: 10, bottom: 60 }}
               >
-                {data.map((entry, index) => (
-                  <Cell 
-                    key={`cell-${index}`} 
-                    fill={entry.color}
-                    opacity={hoveredCategory === null || hoveredCategory === entry.name ? 1 : 0.4}
+                <XAxis 
+                  dataKey="name" 
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: isMobile ? 10 : 12 }}
+                />
+                <YAxis 
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: isMobile ? 10 : 12 }}
+                  tickFormatter={(value) => `₹${value}`}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px',
+                    fontSize: '12px',
+                  }}
+                  formatter={(value: any) => [`₹${value.toLocaleString()}`, 'Amount']}
+                />
+                <Bar 
+                  dataKey="value"
+                  radius={[8, 8, 0, 0]}
+                  onClick={(data) => handleCategoryClick(data.name)}
+                  className="cursor-pointer"
+                  isAnimationActive={true}
+                  animationDuration={400}
+                  animationBegin={0}
+                  animationEasing="ease-out"
+                >
+                  {INCOME_DATA.map((entry, index) => {
+                    const isHovered = hoveredCategory === entry.name;
+                    return (
+                      <Cell 
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                        opacity={hoveredCategory && !isHovered ? 0.4 : 1}
+                        style={{
+                          filter: isHovered ? `drop-shadow(0 4px 8px ${entry.color}80)` : 'none',
+                        }}
+                      />
+                    );
+                  })}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Donut Chart View */}
+          <div 
+            className={`absolute inset-0 transition-all duration-500 ${
+              chartType === 'donut' ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+            }`}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart margin={isMobile ? { top: 10, right: 50, bottom: 10, left: 50 } : { top: 20, right: 100, bottom: 20, left: 100 }}>
+                <Pie
+                  data={INCOME_DATA}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={isMobile ? 45 : 65}
+                  outerRadius={isMobile ? 70 : 100}
+                  paddingAngle={1}
+                  dataKey="value"
+                  onClick={(data) => handleCategoryClick(data.name)}
+                  className="cursor-pointer"
+                  label={(props) => renderCustomLabel(props, hoveredCategory, setHoveredCategory, isMobile)}
+                  labelLine={false}
+                  isAnimationActive={true}
+                  animationDuration={400}
+                  animationBegin={0}
+                  animationEasing="ease-out"
+                >
+                  {INCOME_DATA.map((entry, index) => {
+                    const isHovered = hoveredCategory === entry.name;
+                    return (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.color}
+                        stroke="hsl(var(--background))"
+                        strokeWidth={isHovered ? 2.5 : 1.5}
+                        opacity={hoveredCategory && !isHovered ? 0.4 : 1}
+                        className="transition-all duration-200"
+                        onMouseEnter={() => setHoveredCategory(entry.name)}
+                        onMouseLeave={() => setHoveredCategory(null)}
+                        style={{
+                          filter: isHovered ? `drop-shadow(0 0 6px ${entry.color}80)` : 'none',
+                          transform: isHovered ? 'scale(1.03)' : 'scale(1)',
+                          transformOrigin: 'center',
+                        }}
+                      />
+                    );
+                  })}
+                </Pie>
+                {/* Center Label for Donut */}
+                <text
+                  x="50%"
+                  y="48%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="text-2xl font-bold"
+                  fill="hsl(var(--foreground))"
+                >
+                  ₹{totalIncome.toLocaleString()}
+                </text>
+                <text
+                  x="50%"
+                  y="55%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="text-sm"
+                  fill="hsl(var(--muted-foreground))"
+                >
+                  Total Income
+                </text>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+        
+        {/* Summary Panel */}
+        <div className="mt-6 space-y-2 pt-4 border-t border-border/50">
+          {INCOME_DATA.map((category, idx) => {
+            const isHovered = hoveredCategory === category.name;
+            return (
+              <div
+                key={idx}
+                onClick={() => handleCategoryClick(category.name)}
+                onMouseEnter={() => setHoveredCategory(category.name)}
+                onMouseLeave={() => setHoveredCategory(null)}
+                className="flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-accent/10 group"
+                style={{
+                  backgroundColor: isHovered ? `${category.color}15` : 'transparent',
+                  transform: isHovered ? 'translateX(4px)' : 'translateX(0)',
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-3 h-3 rounded-full transition-all duration-200"
                     style={{ 
-                      transition: 'opacity 0.3s ease',
-                      filter: hoveredCategory === entry.name ? `drop-shadow(0 0 8px ${entry.color})` : 'none'
+                      backgroundColor: category.color,
+                      transform: isHovered ? 'scale(1.5)' : 'scale(1)',
+                      boxShadow: isHovered ? `0 0 8px ${category.color}` : 'none',
                     }}
                   />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="mt-4 sm:mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
-          {data.map((category, idx) => (
-            <Button
-              key={idx}
-              variant="outline"
-              className={`h-auto py-2 sm:py-3 px-2 sm:px-3 flex flex-col items-start gap-1 sm:gap-1.5 hover:shadow-md transition-all ${
-                activeCategory === category.name ? 'border-primary bg-primary/5 shadow-sm' : ''
-              }`}
-              onClick={() => onCategoryClick?.(category.name)}
-              onMouseEnter={() => setHoveredCategory(category.name)}
-              onMouseLeave={() => setHoveredCategory(null)}
-            >
-              <div className="flex items-center gap-1.5 sm:gap-2 w-full">
-                <span className="text-base sm:text-lg shrink-0">{category.emoji}</span>
-                <span className="text-xs sm:text-sm font-semibold text-foreground truncate flex-1 text-left">
-                  {category.name}
-                </span>
+                  <span className="text-lg transition-transform duration-200" style={{ transform: isHovered ? 'scale(1.2)' : 'scale(1)' }}>
+                    {category.emoji}
+                  </span>
+                  <span className="text-sm font-medium text-foreground transition-all duration-200" style={{ fontWeight: isHovered ? 600 : 500 }}>
+                    {category.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-semibold text-foreground">
+                    ₹{category.value.toLocaleString()}
+                  </span>
+                  <span 
+                    className="text-xs font-bold px-2.5 py-1 rounded-md transition-all duration-200"
+                    style={{ 
+                      backgroundColor: isHovered ? `${category.color}30` : `${category.color}20`,
+                      color: category.color,
+                      transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                    }}
+                  >
+                    {category.percentage}%
+                  </span>
+                </div>
               </div>
-              <div className="flex items-baseline justify-between w-full gap-1">
-                <span className="text-xs sm:text-sm font-bold" style={{ color: category.color }}>
-                  ₹{category.value.toLocaleString()}
-                </span>
-                <span className="text-xs font-medium text-muted-foreground">
-                  {category.percentage}%
-                </span>
-              </div>
-            </Button>
-          ))}
+            );
+          })}
         </div>
       </CardContent>
     </Card>
