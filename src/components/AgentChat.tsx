@@ -17,6 +17,15 @@ interface AgentChatProps {
   placeholder?: string;
   onSendMessage?: (message: string) => void;
   initialMessages?: Message[];
+  financialContext?: {
+    totalIncome: number;
+    totalExpenses: number;
+    netSavings: number;
+    totalInvested: number;
+    currentInvestmentValue: number;
+    unrealizedGains: number;
+    netWorth: number;
+  };
 }
 
 const AgentChat = ({
@@ -25,6 +34,7 @@ const AgentChat = ({
   placeholder = "Ask me anything...",
   onSendMessage,
   initialMessages = [],
+  financialContext,
 }: AgentChatProps) => {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
@@ -43,11 +53,13 @@ const AgentChat = ({
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response
+    // Generate contextual AI response
     setTimeout(() => {
+      let responseContent = generateContextualResponse(input, financialContext);
+      
       const agentResponse: Message = {
         role: "agent",
-        content: `I've received your request: "${input}". I'm processing this and will update your workspace with personalized insights shortly.`,
+        content: responseContent,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, agentResponse]);
@@ -151,6 +163,61 @@ const AgentChat = ({
       </div>
     </div>
   );
+};
+
+// Helper function to generate contextual responses
+const generateContextualResponse = (
+  query: string, 
+  context?: AgentChatProps['financialContext']
+): string => {
+  const lowerQuery = query.toLowerCase();
+  
+  if (!context) {
+    return `I've received your request: "${query}". I'm processing this and will update your workspace with personalized insights shortly.`;
+  }
+  
+  // Net worth queries
+  if (lowerQuery.includes('net worth') || lowerQuery.includes('total wealth')) {
+    return `Your total net worth is ₹${(context.netWorth / 1000).toFixed(1)}K, which includes ₹${(context.netSavings / 1000).toFixed(1)}K in savings and ₹${(context.currentInvestmentValue / 1000).toFixed(1)}K in investments. ${context.unrealizedGains > 0 ? `Your investments have gained ₹${(context.unrealizedGains / 1000).toFixed(1)}K in unrealized returns.` : ''}`;
+  }
+  
+  // Investment queries
+  if (lowerQuery.includes('investment') || lowerQuery.includes('portfolio')) {
+    const returnPercent = ((context.unrealizedGains / context.totalInvested) * 100).toFixed(2);
+    return `Your investment portfolio stands at ₹${(context.currentInvestmentValue / 1000).toFixed(1)}K with a total invested amount of ₹${(context.totalInvested / 1000).toFixed(1)}K. You've earned ₹${(context.unrealizedGains / 1000).toFixed(1)}K in unrealized gains (${returnPercent}% returns). Keep tracking your investments for optimal growth!`;
+  }
+  
+  // Spending vs investing balance
+  if (lowerQuery.includes('spending') && lowerQuery.includes('invest')) {
+    const investmentRatio = (context.totalInvested / context.totalIncome) * 100;
+    const expenseRatio = (context.totalExpenses / context.totalIncome) * 100;
+    return `Your monthly expenses are ₹${(context.totalExpenses / 1000).toFixed(1)}K (${expenseRatio.toFixed(1)}% of income) while your total investments are ₹${(context.totalInvested / 1000).toFixed(1)}K. You're saving ₹${(context.netSavings / 1000).toFixed(1)}K per month. ${context.netSavings > context.totalExpenses * 0.3 ? 'Great job maintaining a healthy savings rate!' : 'Consider increasing your savings rate for better financial health.'}`;
+  }
+  
+  // Savings queries
+  if (lowerQuery.includes('saving') || lowerQuery.includes('save')) {
+    const savingsRate = (context.netSavings / context.totalIncome) * 100;
+    return `You're saving ₹${(context.netSavings / 1000).toFixed(1)}K per month, which is ${savingsRate.toFixed(1)}% of your income. Your total income is ₹${(context.totalIncome / 1000).toFixed(1)}K and expenses are ₹${(context.totalExpenses / 1000).toFixed(1)}K. ${savingsRate > 30 ? 'Excellent savings rate!' : 'Try to increase your savings rate to 30% or more for better financial security.'}`;
+  }
+  
+  // Expense queries
+  if (lowerQuery.includes('expense') || lowerQuery.includes('spending')) {
+    return `Your total monthly expenses are ₹${(context.totalExpenses / 1000).toFixed(1)}K out of ₹${(context.totalIncome / 1000).toFixed(1)}K income, leaving you with ₹${(context.netSavings / 1000).toFixed(1)}K in savings. Check the expense breakdown to identify areas where you can optimize spending.`;
+  }
+  
+  // Asset allocation
+  if (lowerQuery.includes('allocation') || lowerQuery.includes('diversi')) {
+    return `Your investment portfolio is allocated across multiple asset classes with a current value of ₹${(context.currentInvestmentValue / 1000).toFixed(1)}K. Review your portfolio distribution in the Investment Analytics section to ensure proper diversification based on your risk profile.`;
+  }
+  
+  // Financial health
+  if (lowerQuery.includes('health') || lowerQuery.includes('status')) {
+    const healthScore = context.netSavings > 0 && context.unrealizedGains > 0 ? 'excellent' : context.netSavings > 0 ? 'good' : 'needs improvement';
+    return `Your financial health is ${healthScore}. Income: ₹${(context.totalIncome / 1000).toFixed(1)}K, Expenses: ₹${(context.totalExpenses / 1000).toFixed(1)}K, Savings: ₹${(context.netSavings / 1000).toFixed(1)}K, Investments: ₹${(context.currentInvestmentValue / 1000).toFixed(1)}K. Net Worth: ₹${(context.netWorth / 1000).toFixed(1)}K. ${context.unrealizedGains > 0 ? 'Your investments are performing well!' : ''}`;
+  }
+  
+  // Default response
+  return `Based on your current financial data: Income ₹${(context.totalIncome / 1000).toFixed(1)}K, Expenses ₹${(context.totalExpenses / 1000).toFixed(1)}K, Savings ₹${(context.netSavings / 1000).toFixed(1)}K, Investments ₹${(context.currentInvestmentValue / 1000).toFixed(1)}K. Ask me about your net worth, investment performance, savings rate, or spending patterns!`;
 };
 
 export default AgentChat;

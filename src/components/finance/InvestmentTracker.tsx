@@ -84,7 +84,11 @@ const assetTypeEmojis = {
   'other': '💼'
 };
 
-export const InvestmentTracker = () => {
+interface InvestmentTrackerProps {
+  onInvestmentChange?: () => void;
+}
+
+export const InvestmentTracker = ({ onInvestmentChange }: InvestmentTrackerProps) => {
   const [activeTab, setActiveTab] = useState('mutual-funds');
   const [addInvestmentOpen, setAddInvestmentOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -238,7 +242,29 @@ export const InvestmentTracker = () => {
                   />
                 </div>
 
-                <Button className="w-full">Add Investment</Button>
+                <Button 
+                  className="w-full"
+                  onClick={() => {
+                    // In production, this would save to backend
+                    console.log('Adding investment:', formData);
+                    setAddInvestmentOpen(false);
+                    setFormData({
+                      assetType: 'mutual-funds',
+                      name: '',
+                      investmentMode: 'lumpsum',
+                      purchaseAmount: '',
+                      units: '',
+                      purchaseDate: '',
+                      currentValue: '',
+                      riskCategory: 'medium',
+                      goalMapping: ''
+                    });
+                    // Refresh financial data after adding investment
+                    onInvestmentChange?.();
+                  }}
+                >
+                  Add Investment
+                </Button>
               </div>
             </DialogContent>
           </Dialog>
