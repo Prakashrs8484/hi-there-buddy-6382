@@ -15,12 +15,16 @@ import { TransactionsList } from "@/components/finance/TransactionsList";
 import { ExpenseSummaryBar } from "@/components/finance/ExpenseSummaryBar.tsx";
 import { AnalyticsDashboard } from "@/components/finance/AnalyticsDashboard";
 import { BudgetPlanner } from "@/components/finance/BudgetPlanner";
+import { InvestmentTracker } from "@/components/finance/InvestmentTracker";
+import { InvestmentAnalytics } from "@/components/finance/InvestmentAnalytics";
+import { FinancialProvider, useFinancialContext } from "@/contexts/FinancialContext";
 
-const FinancePage = () => {
+const FinancePageContent = () => {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
   const [addIncomeOpen, setAddIncomeOpen] = useState(false);
   const [addGoalOpen, setAddGoalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { financialData, refreshFinancialData } = useFinancialContext();
 
   return (
     <DashboardLayout hideNavigation>
@@ -176,10 +180,19 @@ const FinancePage = () => {
                 agentName="Finance Agent"
                 agentIcon={IndianRupee}
                 placeholder="Ask about budgets, expenses, savings, investments..."
+                financialContext={{
+                  totalIncome: financialData.totalIncome,
+                  totalExpenses: financialData.totalExpenses,
+                  netSavings: financialData.netSavings,
+                  totalInvested: financialData.totalInvested,
+                  currentInvestmentValue: financialData.currentInvestmentValue,
+                  unrealizedGains: financialData.unrealizedGains,
+                  netWorth: financialData.netWorth,
+                }}
                 initialMessages={[
                   {
                     role: "agent",
-                    content: "Hello! I'm your finance agent. I can help you track expenses, plan budgets, and reach your financial goals.",
+                    content: `Hello! I'm your finance agent. Your current net worth is ₹${(financialData.netWorth / 1000).toFixed(1)}K with ₹${(financialData.currentInvestmentValue / 1000).toFixed(1)}K in investments. Ask me anything about your finances!`,
                     timestamp: new Date(),
                   },
                 ]}
@@ -197,20 +210,49 @@ const FinancePage = () => {
           <div className="space-y-6">
             {/* Overview Summary Stats */}
             <div className="grid grid-cols-2 gap-4">
-              {financialStats.map((stat, idx) => (
-                <Card key={idx} className="card-hover card-glass p-4">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className={`p-2.5 rounded-xl ${stat.bgColor} flex-shrink-0`}>
-                      <stat.icon className={`w-4 h-4 ${stat.iconColor}`} />
-                    </div>
+              <Card className="card-hover card-glass p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-2.5 rounded-xl bg-success/10 flex-shrink-0">
+                    <TrendingUp className="w-4 h-4 text-success" />
                   </div>
-                  <p className="text-sm text-muted-foreground mb-1.5 font-medium">{stat.label}</p>
-                  <p className="text-2xl font-bold text-foreground mb-1">{stat.value}</p>
-                  <p className={`text-xs font-medium ${stat.changeColor}`}>
-                    {stat.change}
-                  </p>
-                </Card>
-              ))}
+                </div>
+                <p className="text-sm text-muted-foreground mb-1.5 font-medium">Monthly Income</p>
+                <p className="text-2xl font-bold text-foreground mb-1">₹{(financialData.totalIncome / 1000).toFixed(1)}K</p>
+                <p className="text-xs font-medium text-success">+8%</p>
+              </Card>
+
+              <Card className="card-hover card-glass p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-2.5 rounded-xl bg-destructive/10 flex-shrink-0">
+                    <PiggyBank className="w-4 h-4 text-destructive" />
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-1.5 font-medium">Total Expenses</p>
+                <p className="text-2xl font-bold text-foreground mb-1">₹{(financialData.totalExpenses / 1000).toFixed(1)}K</p>
+                <p className="text-xs font-medium text-success">-5%</p>
+              </Card>
+
+              <Card className="card-hover card-glass p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-2.5 rounded-xl bg-primary/10 flex-shrink-0">
+                    <IndianRupee className="w-4 h-4 text-primary" />
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-1.5 font-medium">Net Savings</p>
+                <p className="text-2xl font-bold text-foreground mb-1">₹{(financialData.netSavings / 1000).toFixed(1)}K</p>
+                <p className="text-xs font-medium text-success">+15%</p>
+              </Card>
+
+              <Card className="card-hover card-glass p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="p-2.5 rounded-xl bg-purple-500/10 flex-shrink-0">
+                    <Target className="w-4 h-4 text-purple-600" />
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mb-1.5 font-medium">Investments</p>
+                <p className="text-2xl font-bold text-foreground mb-1">₹{(financialData.currentInvestmentValue / 1000).toFixed(1)}K</p>
+                <p className="text-xs font-medium text-success">+{financialData.unrealizedGainsPercent.toFixed(1)}%</p>
+              </Card>
             </div>
 
             {/* Expense Summary Bar */}
@@ -226,49 +268,69 @@ const FinancePage = () => {
             />
           </div>
         </div>
+
+        {/* Investment Section - Full Width */}
+        <div className="mt-8 space-y-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <TrendingUp className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Investment Portfolio</h2>
+              <p className="text-sm text-muted-foreground">Track and grow your investment wealth</p>
+            </div>
+          </div>
+
+          <Tabs defaultValue="tracker" className="w-full">
+            <TabsList className="grid w-full max-w-md grid-cols-3 mb-6">
+              <TabsTrigger value="tracker">Investment Tracker</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics & Insights</TabsTrigger>
+              <TabsTrigger value="agent">AI Assistant</TabsTrigger>
+            </TabsList>
+            <TabsContent value="tracker" className="space-y-6">
+              <InvestmentTracker onInvestmentChange={refreshFinancialData} />
+            </TabsContent>
+            <TabsContent value="analytics" className="space-y-6">
+              <InvestmentAnalytics />
+            </TabsContent>
+            <TabsContent value="agent" className="space-y-6">
+              <div className="h-[600px]">
+                <AgentChat
+                  agentName="Investment Advisor"
+                  agentIcon={TrendingUp}
+                  placeholder="Ask about portfolio allocation, returns, risk management..."
+                  financialContext={{
+                    totalIncome: financialData.totalIncome,
+                    totalExpenses: financialData.totalExpenses,
+                    netSavings: financialData.netSavings,
+                    totalInvested: financialData.totalInvested,
+                    currentInvestmentValue: financialData.currentInvestmentValue,
+                    unrealizedGains: financialData.unrealizedGains,
+                    netWorth: financialData.netWorth,
+                  }}
+                  initialMessages={[
+                    {
+                      role: "agent",
+                      content: `Hi! I'm your investment advisor. Your portfolio value is ₹${(financialData.currentInvestmentValue / 1000).toFixed(1)}K with ${financialData.unrealizedGainsPercent.toFixed(1)}% returns. Ask me about diversification, risk management, or portfolio optimization!`,
+                      timestamp: new Date(),
+                    },
+                  ]}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </DashboardLayout>
   );
 };
 
-// Data
-const financialStats = [
-  { 
-    label: "Monthly Income", 
-    value: "₹5,200", 
-    change: "+8%", 
-    icon: TrendingUp,
-    bgColor: "bg-success/10",
-    iconColor: "text-success",
-    changeColor: "text-success"
-  },
-  { 
-    label: "Total Expenses", 
-    value: "₹3,180", 
-    change: "-5%", 
-    icon: PiggyBank,
-    bgColor: "bg-destructive/10",
-    iconColor: "text-destructive",
-    changeColor: "text-success"
-  },
-  { 
-    label: "Net Savings", 
-    value: "₹2,020", 
-    change: "+15%", 
-    icon: IndianRupee,
-    bgColor: "bg-primary/10",
-    iconColor: "text-primary",
-    changeColor: "text-success"
-  },
-  { 
-    label: "Active Goals", 
-    value: "4", 
-    change: "+1", 
-    icon: Target,
-    bgColor: "bg-accent/10",
-    iconColor: "text-accent",
-    changeColor: "text-success"
-  },
-];
+const FinancePage = () => {
+  return (
+    <FinancialProvider>
+      <FinancePageContent />
+    </FinancialProvider>
+  );
+};
 
 export default FinancePage;
