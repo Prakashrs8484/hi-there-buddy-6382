@@ -1,6 +1,7 @@
 const Expense = require('../models/Expense');
 const Income = require('../models/Income');
 const Goal = require('../models/Goal');
+const Investment = require('../models/Investment');
 
 exports.addExpense = async (req, res) => {
   try {
@@ -75,13 +76,144 @@ exports.getStats = async (req, res) => {
 
     const expenses = await Expense.find({ userId: req.user._id, date: { $gte: start, $lte: end } });
     const incomes = await Income.find({ userId: req.user._id, date: { $gte: start, $lte: end } });
+    const investments = await Investment.find({ userId: req.user._id });
 
     const totalExpenses = expenses.reduce((s, e) => s + e.amount, 0);
     const totalIncome = incomes.reduce((s, i) => s + i.amount, 0);
+    const totalInvested = investments.reduce((s, i) => s + i.purchaseAmount, 0);
+    const currentInvestmentValue = investments.reduce((s, i) => s + i.currentValue, 0);
     const netSavings = totalIncome - totalExpenses;
     const activeGoals = await Goal.countDocuments({ userId: req.user._id });
 
-    return res.json({ monthlyIncome: totalIncome, totalExpenses, netSavings, activeGoals });
+    return res.json({ 
+      monthlyIncome: totalIncome, 
+      totalExpenses, 
+      netSavings, 
+      activeGoals,
+      totalInvested,
+      currentInvestmentValue
+    });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.addInvestment = async (req, res) => {
+  try {
+    const { assetType, name, investmentMode, purchaseAmount, units, purchaseDate, currentValue, riskCategory, goalMapping } = req.body;
+    const investment = new Investment({ 
+      userId: req.user._id, 
+      assetType, 
+      name, 
+      investmentMode, 
+      purchaseAmount, 
+      units, 
+      purchaseDate, 
+      currentValue, 
+      riskCategory, 
+      goalMapping 
+    });
+    await investment.save();
+    return res.json(investment);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.listInvestments = async (req, res) => {
+  try {
+    const { assetType } = req.query;
+    const query = { userId: req.user._id };
+    if (assetType) query.assetType = assetType;
+    const items = await Investment.find(query).sort({ purchaseDate: -1 });
+    return res.json(items);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.updateInvestment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const investment = await Investment.findOneAndUpdate(
+      { _id: id, userId: req.user._id },
+      req.body,
+      { new: true }
+    );
+    if (!investment) return res.status(404).json({ message: 'Investment not found' });
+    return res.json(investment);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteInvestment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const investment = await Investment.findOneAndDelete({ _id: id, userId: req.user._id });
+    if (!investment) return res.status(404).json({ message: 'Investment not found' });
+    return res.json({ message: 'Investment deleted' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getInvestmentAnalytics = async (req, res) => {
+  try {
+    const investments = await Investment.find({ userId: req.user._id });
+    
+    const totalInvested = investments.reduce((s, i) => s + i.purchaseAmount, 0);
+    const currentValue = investments.reduce((s, i) => s + i.currentValue, 0);
+    const unrealizedGains = currentValue - totalInvested;
+    const unrealizedGainsPercent = totalInvested > 0 ? (unrealizedGains / totalInvested) * 100 : 0;
+
+    // Category-wise breakdown
+    const categoryBreakdown = {};
+    investments.forEach(inv => {
+      if (!categoryBreakdown[inv.assetType]) {
+        categoryBreakdown[inv.assetType] = {
+          invested: 0,
+          current: 0,
+          count: 0
+        };
+      }
+      categoryBreakdown[inv.assetType].invested += inv.purchaseAmount;
+      categoryBreakdown[inv.assetType].current += inv.currentValue;
+      categoryBreakdown[inv.assetType].count += 1;
+    });
+
+    // Risk distribution
+    const riskDistribution = { low: 0, medium: 0, high: 0 };
+    investments.forEach(inv => {
+      riskDistribution[inv.riskCategory] += inv.currentValue;
+    });
+
+    // Top performers
+    const topPerformers = investments
+      .map(inv => ({
+        name: inv.name,
+        assetType: inv.assetType,
+        returns: inv.percentageReturns
+      }))
+      .sort((a, b) => b.returns - a.returns)
+      .slice(0, 5);
+
+    // SIP contributions
+    const sipContributions = investments
+      .filter(inv => inv.investmentMode === 'sip')
+      .reduce((sum, inv) => sum + inv.purchaseAmount, 0);
+
+    return res.json({
+      totalInvested,
+      currentValue,
+      unrealizedGains,
+      unrealizedGainsPercent,
+      categoryBreakdown,
+      riskDistribution,
+      topPerformers,
+      sipContributions,
+      totalInvestments: investments.length
+    });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

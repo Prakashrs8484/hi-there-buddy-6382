@@ -15,6 +15,8 @@ import { TransactionsList } from "@/components/finance/TransactionsList";
 import { ExpenseSummaryBar } from "@/components/finance/ExpenseSummaryBar.tsx";
 import { AnalyticsDashboard } from "@/components/finance/AnalyticsDashboard";
 import { BudgetPlanner } from "@/components/finance/BudgetPlanner";
+import { InvestmentTracker } from "@/components/finance/InvestmentTracker";
+import { InvestmentAnalytics } from "@/components/finance/InvestmentAnalytics";
 
 const FinancePage = () => {
   const [addExpenseOpen, setAddExpenseOpen] = useState(false);
@@ -226,6 +228,32 @@ const FinancePage = () => {
             />
           </div>
         </div>
+
+        {/* Investment Section - Full Width */}
+        <div className="mt-8 space-y-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <TrendingUp className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-foreground">Investment Portfolio</h2>
+              <p className="text-sm text-muted-foreground">Track and grow your investment wealth</p>
+            </div>
+          </div>
+
+          <Tabs defaultValue="tracker" className="w-full">
+            <TabsList className="grid w-full max-w-md grid-cols-2 mb-6">
+              <TabsTrigger value="tracker">Investment Tracker</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics & Insights</TabsTrigger>
+            </TabsList>
+            <TabsContent value="tracker" className="space-y-6">
+              <InvestmentTracker />
+            </TabsContent>
+            <TabsContent value="analytics" className="space-y-6">
+              <InvestmentAnalytics />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </DashboardLayout>
   );
@@ -261,12 +289,12 @@ const financialStats = [
     changeColor: "text-success"
   },
   { 
-    label: "Active Goals", 
-    value: "4", 
-    change: "+1", 
+    label: "Investments", 
+    value: "₹2.75L", 
+    change: "+10.2%", 
     icon: Target,
-    bgColor: "bg-accent/10",
-    iconColor: "text-accent",
+    bgColor: "bg-purple-500/10",
+    iconColor: "text-purple-600",
     changeColor: "text-success"
   },
 ];
