@@ -1,17 +1,31 @@
 const Expense = require('../models/Expense');
 const Income = require('../models/Income');
 const Goal = require('../models/Goal');
+const { updateFinancialContext } = require("../services/financialContext.service");
+
 
 exports.addExpense = async (req, res) => {
   try {
     const { description, category, amount, paymentMethod, date } = req.body;
-    const e = new Expense({ userId: req.user._id, description, category, amount, paymentMethod, date });
+
+    const e = new Expense({
+      userId: req.user._id,
+      description,
+      category,
+      amount,
+      paymentMethod,
+      date
+    });
+
     await e.save();
+    await updateFinancialContext(req.user._id);
+
     return res.json(e);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 };
+
 
 exports.listExpenses = async (req, res) => {
   try {
@@ -30,13 +44,23 @@ exports.listExpenses = async (req, res) => {
 exports.addIncome = async (req, res) => {
   try {
     const { source, amount, date } = req.body;
-    const i = new Income({ userId: req.user._id, source, amount, date });
+
+    const i = new Income({
+      userId: req.user._id,
+      source,
+      amount,
+      date
+    });
+
     await i.save();
+    await updateFinancialContext(req.user._id);
+
     return res.json(i);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 };
+
 
 exports.listIncome = async (req, res) => {
   try {
@@ -50,13 +74,24 @@ exports.listIncome = async (req, res) => {
 exports.addGoal = async (req, res) => {
   try {
     const { title, category, targetAmount, dueDate } = req.body;
-    const g = new Goal({ userId: req.user._id, title, category, targetAmount, dueDate });
+
+    const g = new Goal({
+      userId: req.user._id,
+      title,
+      category,
+      targetAmount,
+      dueDate
+    });
+
     await g.save();
+    await updateFinancialContext(req.user._id);
+
     return res.json(g);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 };
+
 
 exports.listGoals = async (req, res) => {
   try {
