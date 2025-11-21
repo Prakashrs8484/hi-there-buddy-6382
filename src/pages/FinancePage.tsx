@@ -18,6 +18,7 @@ import { BudgetPlanner } from "@/components/finance/BudgetPlanner";
 import { InvestmentTracker } from "@/components/finance/InvestmentTracker";
 import { InvestmentAnalytics } from "@/components/finance/InvestmentAnalytics";
 import { FinancialPlanning } from "@/components/finance/FinancialPlanning";
+import { BillsRecurring } from "@/components/finance/BillsRecurring";
 import { FinancialProvider, useFinancialContext } from "@/contexts/FinancialContext";
 
 const FinancePageContent = () => {
@@ -172,9 +173,9 @@ const FinancePageContent = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Left Column - Functional & Interactive Sections */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Finance Agent Chat */}
             <div className="h-[600px]">
               <AgentChat
@@ -211,7 +212,7 @@ const FinancePageContent = () => {
           </div>
 
           {/* Right Column - Analytics & Insights */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Overview Summary Stats */}
             <div className="grid grid-cols-2 gap-4">
               <Card className="card-hover card-glass p-4">
@@ -274,12 +275,17 @@ const FinancePageContent = () => {
         </div>
 
         {/* Complete Financial Planning Section - Full Width */}
-        <div className="mt-8 space-y-6">
+        <div className="mt-6 space-y-4">
           <FinancialPlanning />
         </div>
 
+        {/* Bills & Recurring Payments - Full Width */}
+        <div className="mt-6">
+          <BillsRecurring />
+        </div>
+
         {/* Investment Section - Full Width */}
-        <div className="mt-8 space-y-6">
+        <div className="mt-6 space-y-4">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 rounded-lg bg-primary/10">
               <TrendingUp className="w-5 h-5 text-primary" />
