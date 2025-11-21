@@ -43,10 +43,10 @@ export const CategoryBreakdown = ({ onCategoryClick, activeCategory }: CategoryB
                 : "border-border bg-card hover:border-primary/50"
             )}
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div 
-                  className="p-2.5 rounded-lg"
+                  className="p-2.5 rounded-lg flex-shrink-0"
                   style={{ backgroundColor: `${category.color}15` }}
                 >
                   <category.icon 
@@ -54,14 +54,14 @@ export const CategoryBreakdown = ({ onCategoryClick, activeCategory }: CategoryB
                     style={{ color: category.color }}
                   />
                 </div>
-                <div>
-                  <p className="font-semibold text-foreground">{category.name}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-foreground truncate">{category.name}</p>
                   <p className="text-sm text-muted-foreground">₹{category.amount.toLocaleString()}</p>
                 </div>
               </div>
               <Badge 
                 variant="outline" 
-                className="font-semibold"
+                className="font-semibold flex-shrink-0 px-2.5 py-1"
                 style={{ 
                   borderColor: category.color,
                   color: category.color,

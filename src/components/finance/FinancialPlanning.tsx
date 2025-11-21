@@ -27,9 +27,9 @@ export const FinancialPlanning = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Financial Health Summary */}
-      <Card className="p-6 bg-gradient-to-br from-primary/5 via-background to-primary/10 border-primary/20">
+      <Card className="p-6 card-glass bg-gradient-to-br from-primary/5 via-background to-primary/10 border-primary/20">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -88,7 +88,7 @@ export const FinancialPlanning = () => {
       </Card>
 
       {/* Emergency Fund Tracker */}
-      <Card className="p-6 bg-card/50 backdrop-blur border-border">
+      <Card className="p-6 card-glass">
         <div className="flex items-start justify-between mb-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -131,7 +131,7 @@ export const FinancialPlanning = () => {
       </Card>
 
       {/* Allocation Comparison */}
-      <Card className="p-6 bg-card/50 backdrop-blur border-border">
+      <Card className="p-6 card-glass">
         <div className="flex items-center gap-2 mb-6">
           <TrendingUp className="w-5 h-5 text-primary" />
           <h3 className="text-xl font-semibold text-foreground">Asset Allocation Strategy</h3>
@@ -177,9 +177,9 @@ export const FinancialPlanning = () => {
       </Card>
 
       {/* Goals Breakdown */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Very Short-Term Goals */}
-        <Card className="p-6 bg-card/50 backdrop-blur border-border">
+        <Card className="p-6 card-glass">
           <div className="flex items-center gap-2 mb-4">
             <Clock className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Very Short-Term</h3>
@@ -207,7 +207,7 @@ export const FinancialPlanning = () => {
         </Card>
 
         {/* Short-Medium Term Goals */}
-        <Card className="p-6 bg-card/50 backdrop-blur border-border">
+        <Card className="p-6 card-glass">
           <div className="flex items-center gap-2 mb-4">
             <Calendar className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Short-Medium Term</h3>
@@ -235,7 +235,7 @@ export const FinancialPlanning = () => {
         </Card>
 
         {/* Long-Term Goals */}
-        <Card className="p-6 bg-card/50 backdrop-blur border-border">
+        <Card className="p-6 card-glass">
           <div className="flex items-center gap-2 mb-4">
             <Target className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Long-Term</h3>

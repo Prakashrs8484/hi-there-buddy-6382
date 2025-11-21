@@ -25,6 +25,30 @@ interface AgentChatProps {
     currentInvestmentValue: number;
     unrealizedGains: number;
     netWorth: number;
+    emergencyFund?: {
+      current: number;
+      required: number;
+      progress: number;
+    };
+    allocation?: {
+      recommended: {
+        emergencyFund: number;
+        veryShortTerm: number;
+        shortMediumTerm: number;
+        longTermInvestments: number;
+      };
+      actual: {
+        emergencyFund: number;
+        veryShortTerm: number;
+        shortMediumTerm: number;
+        longTermInvestments: number;
+      };
+    };
+    goals?: {
+      veryShortTerm: Array<{ name: string; amount: number; deadline: string }>;
+      shortMediumTerm: Array<{ name: string; amount: number; deadline: string }>;
+      longTerm: Array<{ name: string; amount: number; deadline: string }>;
+    };
   };
 }
 
