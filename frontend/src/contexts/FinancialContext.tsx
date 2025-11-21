@@ -25,6 +25,32 @@ interface FinancialData {
   topPerformers: Array<{ name: string; returns: number; assetType: string; }>;
   riskDistribution: { low: number; medium: number; high: number; };
   sipContributions: number;
+  
+  // Financial Planning
+  emergencyFund: {
+    required: number;
+    current: number;
+    progress: number;
+  };
+  allocation: {
+    recommended: {
+      emergencyFund: number;
+      veryShortTerm: number;
+      shortMediumTerm: number;
+      longTermInvestments: number;
+    };
+    actual: {
+      emergencyFund: number;
+      veryShortTerm: number;
+      shortMediumTerm: number;
+      longTermInvestments: number;
+    };
+  };
+  goals: {
+    veryShortTerm: Array<{ name: string; amount: number; deadline: string; }>;
+    shortMediumTerm: Array<{ name: string; amount: number; deadline: string; }>;
+    longTerm: Array<{ name: string; amount: number; deadline: string; }>;
+  };
 }
 
 interface FinancialContextType {
@@ -73,7 +99,39 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
       { name: 'Gold ETF', returns: 8.3, assetType: 'gold-silver' }
     ],
     riskDistribution: { low: 67000, medium: 160000, high: 76000 },
-    sipContributions: 15000
+    sipContributions: 15000,
+    emergencyFund: {
+      required: 3180 * 6, // 6 months of expenses
+      current: 8500,
+      progress: 45
+    },
+    allocation: {
+      recommended: {
+        emergencyFund: 25,
+        veryShortTerm: 15,
+        shortMediumTerm: 20,
+        longTermInvestments: 40
+      },
+      actual: {
+        emergencyFund: 10,
+        veryShortTerm: 8,
+        shortMediumTerm: 12,
+        longTermInvestments: 70
+      }
+    },
+    goals: {
+      veryShortTerm: [
+        { name: 'New Laptop', amount: 2000, deadline: 'Mar 2025' }
+      ],
+      shortMediumTerm: [
+        { name: 'Vacation to Japan', amount: 5000, deadline: 'Jun 2025' },
+        { name: 'Car Down Payment', amount: 50000, deadline: 'Dec 2025' }
+      ],
+      longTerm: [
+        { name: 'Retirement Fund', amount: 5000000, deadline: 'Dec 2050' },
+        { name: 'Dream Home', amount: 2000000, deadline: 'Dec 2030' }
+      ]
+    }
   });
   
   const [isLoading, setIsLoading] = useState(false);

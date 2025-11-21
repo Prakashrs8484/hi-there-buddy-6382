@@ -17,6 +17,7 @@ import { AnalyticsDashboard } from "@/components/finance/AnalyticsDashboard";
 import { BudgetPlanner } from "@/components/finance/BudgetPlanner";
 import { InvestmentTracker } from "@/components/finance/InvestmentTracker";
 import { InvestmentAnalytics } from "@/components/finance/InvestmentAnalytics";
+import { FinancialPlanning } from "@/components/finance/FinancialPlanning";
 import { FinancialProvider, useFinancialContext } from "@/contexts/FinancialContext";
 
 const FinancePageContent = () => {
@@ -188,11 +189,14 @@ const FinancePageContent = () => {
                   currentInvestmentValue: financialData.currentInvestmentValue,
                   unrealizedGains: financialData.unrealizedGains,
                   netWorth: financialData.netWorth,
+                  emergencyFund: financialData.emergencyFund,
+                  allocation: financialData.allocation,
+                  goals: financialData.goals,
                 }}
                 initialMessages={[
                   {
                     role: "agent",
-                    content: `Hello! I'm your finance agent. Your current net worth is ₹${(financialData.netWorth / 1000).toFixed(1)}K with ₹${(financialData.currentInvestmentValue / 1000).toFixed(1)}K in investments. Ask me anything about your finances!`,
+                    content: `Hello! I'm your finance agent. Your current net worth is ₹${(financialData.netWorth / 1000).toFixed(1)}K with ₹${(financialData.currentInvestmentValue / 1000).toFixed(1)}K in investments. Your emergency fund is ${financialData.emergencyFund.progress}% complete. Ask me anything about your finances!`,
                     timestamp: new Date(),
                   },
                 ]}
@@ -269,6 +273,11 @@ const FinancePageContent = () => {
           </div>
         </div>
 
+        {/* Complete Financial Planning Section - Full Width */}
+        <div className="mt-8 space-y-6">
+          <FinancialPlanning />
+        </div>
+
         {/* Investment Section - Full Width */}
         <div className="mt-8 space-y-6">
           <div className="flex items-center gap-3 mb-4">
@@ -307,11 +316,14 @@ const FinancePageContent = () => {
                     currentInvestmentValue: financialData.currentInvestmentValue,
                     unrealizedGains: financialData.unrealizedGains,
                     netWorth: financialData.netWorth,
+                    emergencyFund: financialData.emergencyFund,
+                    allocation: financialData.allocation,
+                    goals: financialData.goals,
                   }}
                   initialMessages={[
                     {
                       role: "agent",
-                      content: `Hi! I'm your investment advisor. Your portfolio value is ₹${(financialData.currentInvestmentValue / 1000).toFixed(1)}K with ${financialData.unrealizedGainsPercent.toFixed(1)}% returns. Ask me about diversification, risk management, or portfolio optimization!`,
+                      content: `Hi! I'm your investment advisor. Your portfolio value is ₹${(financialData.currentInvestmentValue / 1000).toFixed(1)}K with ${financialData.unrealizedGainsPercent.toFixed(1)}% returns. Your long-term allocation is ${financialData.allocation.actual.longTermInvestments}% (recommended: ${financialData.allocation.recommended.longTermInvestments}%). Ask me about diversification, risk management, or portfolio optimization!`,
                       timestamp: new Date(),
                     },
                   ]}
