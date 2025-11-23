@@ -19,6 +19,7 @@ import { InvestmentTracker } from "@/components/finance/InvestmentTracker";
 import { InvestmentAnalytics } from "@/components/finance/InvestmentAnalytics";
 import { FinancialPlanning } from "@/components/finance/FinancialPlanning";
 import { BillsRecurring } from "@/components/finance/BillsRecurring";
+import { IntelligentPlanning } from "@/components/finance/IntelligentPlanning";
 import { FinancialProvider, useFinancialContext } from "@/contexts/FinancialContext";
 
 const FinancePageContent = () => {
@@ -274,18 +275,23 @@ const FinancePageContent = () => {
           </div>
         </div>
 
+        {/* Intelligent Financial Planning System - Full Width */}
+        <div className="mt-6">
+          <IntelligentPlanning />
+        </div>
+
         {/* Complete Financial Planning Section - Full Width */}
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-4">
           <FinancialPlanning />
         </div>
 
         {/* Bills & Recurring Payments - Full Width */}
-        <div className="mt-6">
+        <div className="mt-4">
           <BillsRecurring />
         </div>
 
         {/* Investment Section - Full Width */}
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 space-y-4">
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 rounded-lg bg-primary/10">
               <TrendingUp className="w-5 h-5 text-primary" />

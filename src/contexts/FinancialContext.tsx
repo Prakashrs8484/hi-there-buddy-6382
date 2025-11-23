@@ -51,6 +51,16 @@ interface FinancialData {
     shortMediumTerm: Array<{ name: string; amount: number; deadline: string; }>;
     longTerm: Array<{ name: string; amount: number; deadline: string; }>;
   };
+  
+  // Intelligent Planning Data (client-side)
+  intelligentPlanning?: {
+    monthlySalary: number;
+    annualIncrement: number;
+    bracket: string;
+    budgetAllocations: any;
+    investmentDistribution: any;
+    salaryProjection: any[];
+  };
 }
 
 interface FinancialContextType {
